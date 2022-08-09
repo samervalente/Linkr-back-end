@@ -1,7 +1,6 @@
 {
   "name": "linkr-backend",
   "version": "1.0.0",
-  "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -13,10 +12,24 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samervalente/Linkr-back-end.git"
+  },
+  "bugs": {
+    "url": "https://github.com/samervalente/Linkr-back-end/issues"
+  },
+  "homepage": "https://github.com/samervalente/Linkr-back-end#readme",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
   }
 }
