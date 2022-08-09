@@ -5,7 +5,7 @@ export async function validateUserExistence(req, res, next){
     const {email} = req.body
     try {
         const user = await queryUserByEmail(email)
-        
+        console.log(user)
         if(user !== undefined){
             return res.status(409).send("User already exist")
         }
