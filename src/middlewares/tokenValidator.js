@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import usersRepository from '../repositories/usersRepository.js';
+import usersRepository from '../repository/usersRepository.js';
 
 async function tokenValidator(req, res, next) {
     const { authorization } = req.headers;

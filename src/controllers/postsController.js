@@ -1,4 +1,4 @@
-import postsRepository from '../repositories/postsRepository.js';
+import postsRepository from '../repository/postsRepository.js';
 
 export async function publishPost(req, res) {
     const { url, text } = req.body;
