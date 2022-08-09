@@ -1,8 +1,13 @@
-import express from "express"
-import cors from "cors"
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import postsRouter from './routes/postsRouter.js';
 
-const app = express()
-app.use([cors(), express.json()])
+dotenv.config();
 
+const app = express();
+app.use([cors(), express.json()]);
 
-app.listen(process.env.PORT)
+app.use(postsRouter);
+
+app.listen(process.env.PORT);
