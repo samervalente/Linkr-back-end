@@ -18,13 +18,10 @@ export async function loginUser(req, res) {
   ) {
     const data = inPostgres[0].id;
     const secret = process.env.JWT_SECRET;
-    const config = { expiresIn: 60 * 60 * 24 * 30 };
+    //const config = { expiresIn: 2592000 };
 
-    const token = jwt.sign(data, secret, config);
+    const token = jwt.sign(data, secret);
     //const token = uuid();
-    await connection.query(`DELETE FROM sessions WHERE "userId" = $1`, [
-      inPostgres[0].id,
-    ]);
     res.status(200).send(token);
   } else {
     res.status(401).send();
