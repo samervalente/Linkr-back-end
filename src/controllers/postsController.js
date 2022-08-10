@@ -11,3 +11,14 @@ export async function publishPost(req, res) {
         return res.status(500).send(error);
     }
 }
+
+export async function fetchPosts(req,res){
+    try{
+        const posts = await postsRepository.fetchPosts();
+        return res.send(posts.rows).status(200);
+
+    }catch(err){
+        console.log(err)
+        res.sendStatus(500);
+    }
+}
