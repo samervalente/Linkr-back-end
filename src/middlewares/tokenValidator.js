@@ -7,7 +7,7 @@ async function tokenValidator(req, res, next) {
     const secretKey = process.env.JWT_SECRET;
 
     try {
-        const userId  = jwt.verify(token, secretKey);
+        const userId = jwt.verify(token, secretKey);
 
         const user = await usersRepository.getUserById(userId);
         if (!user.rowCount) {
