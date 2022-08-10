@@ -7,8 +7,21 @@ async function publishUrl(url, text, userId) {
     `, [url, text, userId])
 }
 
-const postsRepository = {
-    publishUrl
+async function fetchPosts(){
+    return connection.query(`
+        SELECT posts.*, users."imageProfile", users.name
+        FROM posts JOIN users ON posts."userId" = users.id
+        ORDER BY "createdAt" DESC 
+        LIMIT 20
+    `)
 }
 
+const postsRepository = {
+    publishUrl, 
+    fetchPosts
+}
+
+
+
 export default postsRepository;
+
