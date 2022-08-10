@@ -16,11 +16,23 @@ async function fetchPosts(){
     `)
 }
 
-const postsRepository = {
-    publishUrl, 
-    fetchPosts
+
+async function insertHashtags(hashtags){
+    hashtags.map(async hashtag => {
+        const {rows: hashtagOnDB} = await connection.query(`SELECT * FROM hashtags WHERE name = $1`,
+        [hashtag.toLowerCase()])
+        hashtagOnDB.length === 0? await connection.query(`INSERT INTO hashtags  (name) VALUES ($1)`,
+        [hashtag.toLowerCase()]): null
+
+    })
+    
 }
 
+const postsRepository = {
+    publishUrl, 
+    fetchPosts,
+    insertHashtags
+}
 
 
 export default postsRepository;
