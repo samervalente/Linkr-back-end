@@ -1,10 +1,13 @@
 import connection from '../database/postgre.js';
-import getHashtagsIds from "../utils/getHashtagIds.js"
+import getHashtagsIds from "../utils/getHashtagIds.js";
 
-async function publishUrl(url, text, userId) {
-    const ids = []
-    const {rows: result} = await connection.query(` INSERT INTO posts (url, description, "userId") VALUES 
-    ($1, $2, $3) RETURNING *`, [url, text, userId])
+async function publishUrl(url, text, userId, title, image, description) {
+    const ids = [];
+    const {rows: result} = await connection.query(` 
+        INSERT INTO posts (url, description, "userId", "urlTitle", "urlImage", "urlDescription") 
+        VALUES ($1, $2, $3, $4, $5, $6) 
+        RETURNING *
+    `, [url, text, userId, title, image, description]);
     
     const hashtags= getHashtagsIds(result[0].description)
     await insertHashtags(hashtags)
