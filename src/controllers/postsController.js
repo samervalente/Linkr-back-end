@@ -1,12 +1,12 @@
 import postsRepository from '../repository/postsRepository.js';
 
 export async function publishPost(req, res) {
-    const { url, text, hashtags } = req.body;
+    const { url, text } = req.body;
 
     const userId = res.locals.userId;
     try {
         await postsRepository.publishUrl(url, text, userId);
-        await postsRepository.insertHashtags(hashtags)
+        
         return res.sendStatus(201);
 
     } catch (error) {
@@ -23,5 +23,14 @@ export async function fetchPosts(req,res){
     }catch(err){
         
         res.sendStatus(500);
+    }
+}
+
+export async function getTrending(req, res){
+    try {
+        const trending = await postsRepository.getTrending();
+        res.status(200).send(trending)
+    } catch (error) {
+        res.sendStatus(500)
     }
 }
