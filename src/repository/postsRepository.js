@@ -1,10 +1,10 @@
 import connection from '../database/postgre.js';
 
-async function publishUrl(url, text, userId) {
+async function publishUrl(url, text, userId, title, image, description) {
     return connection.query(` 
-        INSERT INTO posts (url, description, "userId")
-        VALUES ($1, $2, $3)
-    `, [url, text, userId])
+        INSERT INTO posts (url, description, "userId", "urlTitle", "urlImage", "urlDescription")
+        VALUES ($1, $2, $3, $4, $5, $6)
+    `, [url, text, userId, title, image, description])
 }
 
 async function fetchPosts(){
