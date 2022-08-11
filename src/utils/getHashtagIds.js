@@ -22,6 +22,6 @@ export default function getHashtagsIds(string){
              }
          }
          
-         return arr
+         return []
         
 }
