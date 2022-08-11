@@ -40,6 +40,16 @@ export async function getTrending(req, res){
     }
 }
 
+export async function getPostsByHashtag(req,res){
+    const {hashtagName} = req.params
+    try {
+        const posts = await postsRepository.getPostsByHashtagName(hashtagName)
+        res.status(200).send(posts)
+    } catch (error) {
+        res.sendStatus(500)
+    }
+}
+
 export async function updatePost(req, res) {
     const userId = res.locals.userId;
     const { text } = req.body;
