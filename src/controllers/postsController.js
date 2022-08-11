@@ -37,3 +37,13 @@ export async function getTrending(req, res){
         res.sendStatus(500)
     }
 }
+
+export async function getPostsByHashtag(req,res){
+    const {hashtagName} = req.params
+    try {
+        const posts = await postsRepository.getPostsByHashtagName(hashtagName)
+        res.status(200).send(posts)
+    } catch (error) {
+        res.sendStatus(500)
+    }
+}

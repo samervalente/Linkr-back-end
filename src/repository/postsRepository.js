@@ -15,6 +15,7 @@ if (!result[0].description) {
 }
 
     const hashtags = getHashtagsIds(result[0].description);
+    console.log(hashtags)
     const postId = result[0].id;
     await insertHashtags(hashtags, postId);
    }
@@ -57,19 +58,35 @@ async function insertHashtags(hashtags, postId){
 }
 
 async function getTrending(){
-    const {rows: trending} = await connection.query(`SELECT COUNT("postId") as quantPosts, h.name as tag FROM hashtagsposts
+    const {rows: trending} = await connection.query(`SELECT h.id, COUNT("postId") as quantPosts, h.name as tag FROM hashtagsposts
     JOIN hashtags h
     ON h.id = "hashtagId"
-    GROUP BY "hashtagId", h.name
+    GROUP BY "hashtagId", h.name, h.id
     ORDER BY quantposts DESC`)
 
     return trending
 }
 
+async function getPostsByHashtagName(name){
+    const {rows: posts} = await connection.query(`SELECT  p.url, p.description, p."urlTitle", p."urlImage", p."urlDescription", users.name as userName, users."imageProfile"
+    FROM hashtagsposts h
+    JOIN posts p
+    ON p.id = h."postId"
+    JOIN hashtags ht
+    ON ht.id = h."hashtagId"
+    JOIN users
+    ON users.id = "userId"
+    WHERE ht.name = $1 
+    ORDER BY p."createdAt" DESC`,[name])
+    
+    return posts
+}
+
 const postsRepository = {
     publishUrl, 
     fetchPosts,
-    getTrending
+    getTrending,
+    getPostsByHashtagName
 }
 
 

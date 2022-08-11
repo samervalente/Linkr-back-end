@@ -15,7 +15,11 @@ export default function getHashtagsIds(string){
                  })
              
                  for(let hashtag of arrHashtags){
-                     filt.push(hashtag.replaceAll(",",""))
+                    
+                    hashtag = hashtag.replaceAll(",","").replace(/[\r\n\\/]/gm, '')
+                    
+                    console.log(hashtag)
+                     filt.push(hashtag)
                  }
                 
               return filt
@@ -25,3 +29,4 @@ export default function getHashtagsIds(string){
          return []
         
 }
+
