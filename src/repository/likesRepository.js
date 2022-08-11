@@ -36,11 +36,22 @@ async function deleteLike(param, userId) {
   );
 }
 
+async function getCountLikes(param) {
+  return connection.query(
+    ` 
+      SELECT COUNT(id) FROM likes
+      WHERE "postId" = $1
+    `,
+    [param]
+  );
+}
+
 const likesRepository = {
   getPost,
   getLikes,
   deleteLike,
   publishLike,
+  getCountLikes,
 };
 
 export default likesRepository;
