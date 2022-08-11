@@ -43,10 +43,12 @@ export async function getTrending(req, res){
 }
 
 export async function getPostsByHashtag(req,res){
-    const {hashtagName} = req.params
+    const {hashtagName} = req.params;
+    const userId = res.locals.userId;
     try {
-        const posts = await postsRepository.getPostsByHashtagName(hashtagName)
-        res.status(200).send(posts)
+        const posts = await postsRepository.getPostsByHashtagName(hashtagName);
+        const sendPosts = { userId: Number(userId), posts: posts };
+        res.status(200).send(sendPosts);
     } catch (error) {
         res.sendStatus(500)
     }
