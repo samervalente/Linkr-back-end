@@ -18,7 +18,7 @@ export default function getHashtagsIds(string){
                     
                     hashtag = hashtag.replaceAll(",","").replace(/[\r\n\\/]/gm, '')
                     
-                    console.log(hashtag)
+
                      filt.push(hashtag)
                  }
                 
