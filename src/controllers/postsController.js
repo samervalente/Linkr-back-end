@@ -21,9 +21,11 @@ export async function publishPost(req, res) {
 }
 
 export async function fetchPosts(req,res){
+    const userId = res.locals.userId;
     try{
         const posts = await postsRepository.fetchPosts();
-        return res.send(posts.rows).status(200);
+        const sendPosts = { userId: Number(userId), posts: posts.rows };
+        return res.send(sendPosts).status(200);
 
     }catch(err){
         

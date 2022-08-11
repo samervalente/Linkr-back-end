@@ -13,7 +13,6 @@ if (!result[0].description) {
     return
 }
     const hashtags = getHashtagsIds(result[0].description);
-    console.log(hashtags)
     const postId = result[0].id;
     await insertHashtags(hashtags, postId);
    }
