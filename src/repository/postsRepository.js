@@ -9,8 +9,14 @@ async function publishUrl(url, text, userId, title, image, description) {
         RETURNING *
     `, [url, text, userId, title, image, description]);
     
-    const hashtags= getHashtagsIds(result[0].description)
-    await insertHashtags(hashtags)
+    if (!result[0].description) {
+        console.log("sem descrição");
+        return
+    }
+
+    const hashtags= getHashtagsIds(result[0].description);
+
+    await insertHashtags(hashtags);
 
         for(const hashtag of hashtags){
             const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtag.toLowerCase()])
@@ -39,9 +45,8 @@ async function insertHashtags(hashtags){
     hashtags.map(async hashtag => {
         const {rows: hashtagOnDB} = await connection.query(`SELECT * FROM hashtags WHERE name = $1`,
         [hashtag.toLowerCase()])
-        hashtagOnDB.length === 0? await connection.query(`INSERT INTO hashtags  (name) VALUES ($1)`,
+        hashtagOnDB.length === 0 ? await connection.query(`INSERT INTO hashtags (name) VALUES ($1)`,
         [hashtag.toLowerCase()]): null
-
     }) 
 }
 
