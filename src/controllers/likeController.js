@@ -20,7 +20,7 @@ export async function getLikes(req, res) {
     const like = await likesRepository.getLikes(param, userId);
     return res.status(200).send(like.rows[0]);
   } catch (err) {
-    res.sendStatus(500).send(err);
+    res.sendStatus(500);
   }
 }
 
@@ -31,6 +31,16 @@ export async function deleteLikes(req, res) {
     await likesRepository.deleteLike(param, userId);
     return res.status(200).send();
   } catch (err) {
-    res.sendStatus(500).send(err);
+    res.sendStatus(500);
+  }
+}
+
+export async function getCountLikes(req, res) {
+  const param = req.params.id;
+  try {
+    const { rows: count } = await likesRepository.getCountLikes(param);
+    return res.status(200).send(count[0]);
+  } catch (err) {
+    res.status(500).send(err);
   }
 }
