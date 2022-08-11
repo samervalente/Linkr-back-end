@@ -1,7 +1,6 @@
 import connection from '../database/postgre.js';
 import getHashtagsIds from "../utils/getHashtagIds.js";
 
-
 async function publishUrl(url, text, userId, title, image, description) {
   
     const {rows: result} = await connection.query(` 
@@ -13,7 +12,6 @@ async function publishUrl(url, text, userId, title, image, description) {
 if (!result[0].description) {
     return
 }
-
     const hashtags = getHashtagsIds(result[0].description);
     const postId = result[0].id;
     await insertHashtags(hashtags, postId);
@@ -27,7 +25,6 @@ async function fetchPosts(){
         LIMIT 20
     `)
 }
-
 
 async function insertHashtags(hashtags, postId){
     hashtags.map(async hashtag => {
@@ -66,12 +63,28 @@ async function getTrending(){
     return trending
 }
 
+async function deleteHashtagsPosts(postId) {
+    return connection.query(`
+        DELETE FROM hashtagsposts 
+        WHERE "postId" = $1;
+    `, [postId]);
+}
+
+async function updatePostById(text, postId) {
+    return connection.query(`
+        UPDATE posts 
+        SET description = $1 
+        WHERE id = $2;
+    `, [text, postId]);
+}
+
 const postsRepository = {
     publishUrl, 
     fetchPosts,
-    getTrending
+    insertHashtags,
+    getTrending,
+    deleteHashtagsPosts,
+    updatePostById
 }
 
-
 export default postsRepository;
-
