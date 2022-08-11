@@ -66,7 +66,8 @@ async function getTrending(){
 }
 
 async function getPostsByHashtagName(name){
-    const {rows: posts} = await connection.query(`SELECT  p.id, users.id as userId, p.url, p.description, p."urlTitle", p."urlImage", p."urlDescription", users.name as name, users."imageProfile"
+    const {rows: posts} = await connection.query(`SELECT p.*, users.name as name, users."imageProfile"
+
     FROM hashtagsposts h
     JOIN posts p
     ON p.id = h."postId"
@@ -77,7 +78,7 @@ async function getPostsByHashtagName(name){
     WHERE ht.name = $1 
     ORDER BY p."createdAt" DESC`,[name])
     
-    return posts
+    return posts;
 }
 
 async function deleteHashtagsPosts(postId) {
