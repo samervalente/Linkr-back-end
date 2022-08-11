@@ -12,7 +12,7 @@ router.post('/posts', tokenValidator, validateSchema(postSchema), publishPost);
 router.get('/posts', tokenValidator, fetchPosts);
 router.get("/trending", getTrending);
 router.put('/posts/:id', tokenValidator, validateSchema(updateSchema), updatePost);
-router.get("/posts/:hashtagName", getPostsByHashtag);
+router.get("/posts/:hashtagName", tokenValidator, getPostsByHashtag);
 
 export default router;
 
