@@ -58,13 +58,15 @@ async function getTrending(){
     JOIN hashtags h
     ON h.id = "hashtagId"
     GROUP BY "hashtagId", h.name, h.id
-    ORDER BY quantposts DESC`)
+    ORDER BY quantposts DESC
+    LIMIT 10
+    `)
 
     return trending
 }
 
 async function getPostsByHashtagName(name){
-    const {rows: posts} = await connection.query(`SELECT  p.url, p.description, p."urlTitle", p."urlImage", p."urlDescription", users.name as name, users."imageProfile"
+    const {rows: posts} = await connection.query(`SELECT  p.id, users.id as userId, p.url, p.description, p."urlTitle", p."urlImage", p."urlDescription", users.name as name, users."imageProfile"
     FROM hashtagsposts h
     JOIN posts p
     ON p.id = h."postId"
