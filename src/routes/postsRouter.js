@@ -12,3 +12,4 @@ router.get('/posts', tokenValidator, fetchPosts)
 router.get("/trending", getTrending)
 
 export default router;
+

@@ -5,22 +5,18 @@ async function publishUrl(url, text, userId) {
     const ids = []
     const {rows: result} = await connection.query(` INSERT INTO posts (url, description, "userId") VALUES 
     ($1, $2, $3) RETURNING *`, [url, text, userId])
-    
-    const hashtags= getHashtagsIds(result[0].description)
+  
+    const hashtags = getHashtagsIds(result[0].description)
+    const postId = result[0].id
     await insertHashtags(hashtags)
+   
+          await hashtags.map(async hashtag => {
+           const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtag.toLowerCase()])
 
-        for(const hashtag of hashtags){
-            const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtag.toLowerCase()])
-            ids.push(id[0])
-        }
-            if(ids.length > 0){
-                const postId = result[0].id
-               
-                ids.map(async obj => {
-                await connection.query(`INSERT INTO hashtagsposts ("postId", "hashtagId") VALUES ($1, $2)`,[postId, obj.id])
-            })
-        }
-}
+           await connection.query(`INSERT INTO hashtagsposts ("postId", "hashtagId") VALUES ($1, $2)`,[postId, id[0].id])
+          
+        })
+   }
 
 async function fetchPosts(){
     return connection.query(`
