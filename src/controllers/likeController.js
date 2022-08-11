@@ -13,11 +13,24 @@ export async function publishLike(req, res) {
   }
 }
 
-//export async function fetchPosts(req, res) {
-// try {
-//  const posts = await postsRepository.fetchPosts();
-//  return res.send(posts.rows).status(200);
-//} catch (err) {
-//   res.sendStatus(500);
-//}
-//}
+export async function getLikes(req, res) {
+  const param = req.params.id;
+  const userId = res.locals.userId;
+  try {
+    const like = await likesRepository.getLikes(param, userId);
+    return res.status(200).send(like.rows[0]);
+  } catch (err) {
+    res.sendStatus(500).send(err);
+  }
+}
+
+export async function deleteLikes(req, res) {
+  const param = req.params.id;
+  const userId = res.locals.userId;
+  try {
+    await likesRepository.deleteLike(param, userId);
+    return res.status(200).send();
+  } catch (err) {
+    res.sendStatus(500).send(err);
+  }
+}
