@@ -18,13 +18,23 @@ async function publishUrl(url, text, userId, title, image, description) {
     const hashtags = getHashtagsIds(result[0].description)
     const postId = result[0].id
     await insertHashtags(hashtags)
-   
-           hashtags.map(async hashtag => {
-           const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtag.toLowerCase()])
+    const ids = []
 
-           await connection.query(`INSERT INTO hashtagsposts ("postId", "hashtagId") VALUES ($1, $2)`,[postId, id[0].id])
-          })
+    for(let i = 0; i < hashtags.length; i ++){
+        const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtags[i].toLowerCase()])
+        
+        if(id[0]){
+            ids.push(id[0].id)
+        }
+        
+    }
+    console.log(ids)
 
+        //   hashtags.map(async hashtag => {
+           
+        // await connection.query(`INSERT INTO hashtagsposts ("postId", "hashtagId") VALUES ($1, $2)`,[postId, id[0].id])
+        //   })
+        
    }
 
 async function fetchPosts(){
