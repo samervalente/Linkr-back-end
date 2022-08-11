@@ -5,36 +5,18 @@ import getHashtagsIds from "../utils/getHashtagIds.js";
 async function publishUrl(url, text, userId, title, image, description) {
   
     const {rows: result} = await connection.query(` 
-        INSERT INTO posts (url, description, "userId", "urlTitle", "urlImage", "urlDescription") 
-        VALUES ($1, $2, $3, $4, $5, $6) 
-        RETURNING *
-    `, [url, text, userId, title, image, description]);
-  
-    if (!result[0].description) {
-        console.log("sem descrição");
-        return
-    }
+    INSERT INTO posts (url, description, "userId", "urlTitle", "urlImage", "urlDescription") 
+    VALUES ($1, $2, $3, $4, $5, $6) 
+    RETURNING *
+`, [url, text, userId, title, image, description]);
 
-    const hashtags = getHashtagsIds(result[0].description)
-    const postId = result[0].id
-    await insertHashtags(hashtags)
-    const ids = []
+if (!result[0].description) {
+    return
+}
 
-    for(let i = 0; i < hashtags.length; i ++){
-        const {rows: id} = await connection.query(`SELECT hashtags.id, hashtags.name FROM hashtags WHERE name = $1`,[hashtags[i].toLowerCase()])
-        
-        if(id[0]){
-            ids.push(id[0].id)
-        }
-        
-    }
-    console.log(ids)
-
-        //   hashtags.map(async hashtag => {
-           
-        // await connection.query(`INSERT INTO hashtagsposts ("postId", "hashtagId") VALUES ($1, $2)`,[postId, id[0].id])
-        //   })
-        
+    const hashtags = getHashtagsIds(result[0].description);
+    const postId = result[0].id;
+    await insertHashtags(hashtags, postId);
    }
 
 async function fetchPosts(){
@@ -47,12 +29,30 @@ async function fetchPosts(){
 }
 
 
-async function insertHashtags(hashtags){
+async function insertHashtags(hashtags, postId){
     hashtags.map(async hashtag => {
-        const {rows: hashtagOnDB} = await connection.query(`SELECT * FROM hashtags WHERE name = $1`,
-        [hashtag.toLowerCase()])
-        hashtagOnDB.length === 0 ? await connection.query(`INSERT INTO hashtags (name) VALUES ($1)`,
-        [hashtag.toLowerCase()]): null
+        const {rows: hashtagOnDB} = await connection.query(`
+            SELECT * FROM hashtags 
+            WHERE name = $1
+        `,[hashtag.toLowerCase()]);
+
+        if (hashtagOnDB[0]) {
+            await connection.query(`
+                INSERT INTO hashtagsposts ("postId", "hashtagId") 
+                VALUES ($1, $2)
+            `,[postId, hashtagOnDB[0].id]);
+        } else {
+            const {rows: result} = await connection.query(`
+                INSERT INTO hashtags (name) 
+                VALUES ($1)
+                RETURNING *
+            `, [hashtag.toLowerCase()]);
+
+            await connection.query(`
+            INSERT INTO hashtagsposts ("postId", "hashtagId") 
+            VALUES ($1, $2)
+        `,[postId, result[0].id]);
+        }
     }) 
 }
 
