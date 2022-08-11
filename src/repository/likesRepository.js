@@ -46,12 +46,26 @@ async function getCountLikes(param) {
   );
 }
 
+async function getNames(param) {
+  return connection.query(
+    `
+       SELECT users.name FROM likes 
+       JOIN users
+       ON likes."userId" = users.id
+       WHERE likes."postId" = $1
+       LIMIT 3
+    `,
+    [param]
+  );
+}
+
 const likesRepository = {
   getPost,
   getLikes,
   deleteLike,
   publishLike,
   getCountLikes,
+  getNames,
 };
 
 export default likesRepository;

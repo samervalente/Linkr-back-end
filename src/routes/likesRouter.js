@@ -6,6 +6,7 @@ import {
   deleteLikes,
   getCountLikes,
   getLikes,
+  getNames,
   publishLike,
 } from "../controllers/likeController.js";
 import { validateParam } from "../middlewares/likesMiddleware.js";
@@ -16,5 +17,6 @@ router.post("/likes", tokenValidator, validateSchema(likeSchema), publishLike);
 router.get("/likes/:id", tokenValidator, validateParam, getLikes); //id do post
 router.delete("/likes/:id", tokenValidator, validateParam, deleteLikes);
 router.get("/likes/count/:id", validateParam, getCountLikes);
+router.get("/likes/names/:id", validateParam, getNames);
 
 export default router;

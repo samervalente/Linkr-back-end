@@ -44,3 +44,13 @@ export async function getCountLikes(req, res) {
     res.status(500).send(err);
   }
 }
+
+export async function getNames(req, res) {
+  const param = req.params.id;
+  try {
+    const { rows: names } = await likesRepository.getNames(param);
+    return res.status(200).send(names);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+}
