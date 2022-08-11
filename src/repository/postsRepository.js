@@ -75,7 +75,7 @@ async function getPostsByHashtagName(name){
     WHERE ht.name = $1 
     ORDER BY p."createdAt" DESC`,[name])
     
-    return posts
+    return posts;
 }
 
 async function deleteHashtagsPosts(postId) {
