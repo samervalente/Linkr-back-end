@@ -11,3 +11,7 @@ export async function RegisterUser(req, res){
         res.status(500).send(error)
     }
 }
+
+export async function checkToken(req, res) {
+    res.sendStatus(200);
+}
