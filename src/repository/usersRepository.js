@@ -15,9 +15,21 @@ async function checkPostByUserId(postId, userId) {
     `, [postId, userId]);
 }
 
+
+
+ async function SearchUsers(userName){
+    const {rows: users} = await connection.query(`SELECT id, name, "imageProfile" FROM users WHERE name ILIKE '${userName}%'
+    ORDER BY name ASC    
+    LIMIT 2`)
+    return users
+  
+}
+
 const usersRepository = {
     getUserById,
-    checkPostByUserId
+    checkPostByUserId,
+    SearchUsers
+     
 }
 
 export default usersRepository;
