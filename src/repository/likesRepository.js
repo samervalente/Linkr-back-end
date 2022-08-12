@@ -46,16 +46,16 @@ async function getCountLikes(param) {
   );
 }
 
-async function getNames(param) {
+async function getNames(param, userId) {
   return connection.query(
     `
        SELECT users.name FROM likes 
        JOIN users
        ON likes."userId" = users.id
-       WHERE likes."postId" = $1
-       LIMIT 3
+       WHERE likes."postId" = $1 AND likes."userId" != $2
+       LIMIT 2
     `,
-    [param]
+    [param, userId]
   );
 }
 

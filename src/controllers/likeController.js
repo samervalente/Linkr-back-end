@@ -47,8 +47,9 @@ export async function getCountLikes(req, res) {
 
 export async function getNames(req, res) {
   const param = req.params.id;
+  const userId = res.locals.userId;
   try {
-    const { rows: names } = await likesRepository.getNames(param);
+    const { rows: names } = await likesRepository.getNames(param, userId);
     return res.status(200).send(names);
   } catch (err) {
     res.status(500).send(err);
