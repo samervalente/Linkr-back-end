@@ -20,7 +20,7 @@ async function checkPostByUserId(postId, userId) {
  async function SearchUsers(userName){
     const {rows: users} = await connection.query(`SELECT id, name, "imageProfile" FROM users WHERE name ILIKE '${userName}%'
     ORDER BY name ASC    
-    LIMIT 2`)
+    LIMIT 8`)
     return users
   
 }
