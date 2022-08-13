@@ -3,7 +3,7 @@ import usersRepository from '../repository/usersRepository.js';
 
 async function tokenValidator(req, res, next) {
     const { authorization } = req.headers;
-    const token = authorization?.replace('Bearer ', '');
+    const token = authorization.replace('Bearer ', '');
     const secretKey = process.env.JWT_SECRET;
 
     try {

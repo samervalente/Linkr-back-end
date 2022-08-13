@@ -83,3 +83,15 @@ export async function updatePost(req, res) {
         res.sendStatus(500);
     }
 }
+
+export async function deletePost(req, res){
+
+    const { id: postId } = req.params;
+    try{
+        await postsRepository.deletePost(postId);
+        return res.sendStatus(200);
+
+    }catch(error){
+        res.sendStatus(500);
+    }
+}

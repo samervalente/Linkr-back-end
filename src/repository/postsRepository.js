@@ -96,6 +96,14 @@ async function updatePostById(text, postId) {
     `, [text, postId]);
 }
 
+async function deletePost(postId){
+    return connection.query(`
+        DELETE FROM posts 
+        WHERE id = $1;
+    `, [postId])
+    
+}
+
 const postsRepository = {
     publishUrl, 
     fetchPosts,
@@ -103,7 +111,8 @@ const postsRepository = {
     getTrending,
     getPostsByHashtagName,
     deleteHashtagsPosts,
-    updatePostById
+    updatePostById,
+    deletePost
 }
 
 export default postsRepository;
