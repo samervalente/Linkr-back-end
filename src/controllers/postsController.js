@@ -98,3 +98,20 @@ export async function updatePost(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function deletePost(req, res) {
+  const userId = res.locals.userId;
+  const { id: postId } = req.params;
+  try {
+    const result = await usersRepository.checkPostByUserId(postId, userId);
+    if (!result.rowCount) {
+      return res.status(401).send("Esse post não pertence ao usuário logado");
+    }
+    
+    await postsRepository.deletePost(postId);
+    return res.sendStatus(200);
+
+  } catch (error) {
+    res.sendStatus(500);
+  }
+}
