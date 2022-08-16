@@ -1,10 +1,11 @@
 import { Router } from "express";
 import tokenValidator from "../middlewares/tokenValidator.js";
-import { getRandomUsers, getUser } from "../controllers/usersController.js";
+import { getUsers, getUserById, followUser } from "../controllers/usersController.js";
 
 const router = Router();
 
-router.get("/users", getRandomUsers);
-router.get("/find/:id", getUser);
+router.get("/users", getUsers);
+router.get("/find/:id", getUserById);
+router.post("/users/follow", followUser)
 
 export default router;

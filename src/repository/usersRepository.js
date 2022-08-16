@@ -38,11 +38,36 @@ async function FindUser(id) {
   return users;
 }
 
+async function followUser(userId, followedId, type){
+  userId = Number(userId)
+  followedId = Number(followedId)
+ 
+  if(type === "follow"){
+    await connection.query(`INSERT INTO follows ("userId","followedId") VALUES ($1,$2)`,[userId, followedId])
+  }
+  else{
+    await connection.query(`DELETE FROM follows WHERE "userId" = $1 AND "followedId" = $2`,[userId, followedId])
+  }
+}
+
+async function getFollowStatus(userId, followedId){
+  const {rows: followId} = await connection.query('SELECT * FROM follows WHERE "userId" = $1 AND "followedId" = $2',[userId, followedId])
+  
+
+  if(followId.length === 0 ){
+    return false
+  }else{
+    return true
+  }
+}
+
 const usersRepository = {
   getUserById,
   checkPostByUserId,
   SearchUsers,
   FindUser,
+  followUser,
+  getFollowStatus
 };
 
 export default usersRepository;
