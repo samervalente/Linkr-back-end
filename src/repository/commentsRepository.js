@@ -7,8 +7,21 @@ async function publishComment(comment, postId, userId) {
     `, [comment, postId, userId]);
 }
 
+async function fetchComments(postId) {
+    return await connection.query(` 
+        SELECT c.id, c.content, p.id AS "postId", u.id AS "userId", u.name, u."imageProfile" 
+        FROM comments c 
+        JOIN posts p 
+        ON c."postId" = p.id 
+        JOIN users u 
+        ON c."userId" = u.id 
+        WHERE c."postId" = $1 
+    `, [postId]);
+}
+
 const commentsRepository = {
-    publishComment
+    publishComment,
+    fetchComments
 };
 
 export default commentsRepository;
