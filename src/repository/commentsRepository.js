@@ -15,7 +15,8 @@ async function fetchComments(postId) {
         ON c."postId" = p.id 
         JOIN users u 
         ON c."userId" = u.id 
-        WHERE c."postId" = $1 
+        WHERE c."postId" = $1
+        ORDER BY c."createdAt" 
     `, [postId]);
 }
 
