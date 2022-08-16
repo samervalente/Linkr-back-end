@@ -1,9 +1,10 @@
 import usersRepository from "../repository/usersRepository.js";
 
 export async function getUsers(req, res) {
-  const { name } = req.query;
+  const { name, id } = req.query;
+  
   try {
-    const users = await usersRepository.SearchUsers(name);
+    const users = await usersRepository.SearchUsers(name,id);
     return res.status(200).send(users);
   } catch (error) {
     console.log(error);

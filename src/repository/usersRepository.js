@@ -21,14 +21,33 @@ async function checkPostByUserId(postId, userId) {
   );
 }
 
-async function SearchUsers(userName) {
-  const { rows: users } =
-    await connection.query(`SELECT id, name, "imageProfile" FROM users WHERE name ILIKE '${userName}%'
-    ORDER BY name ASC    
-    LIMIT 8`)
-    return users
+
+
+async function SearchUsers(userName, userId) {
+  console.log(userName, userId)
+  const {rows: followedsUsers} = await connection.query(`SELECT users.id as userId, name, follows."userId" as followedBy, "imageProfile" FROM users
+  JOIN follows
+  on follows."followedId" = users.id
+  WHERE name ILIKE '${userName}%' AND follows."userId" = $1`,[userId])
+
+  const { rows: unFollowedUsers } = await connection.query(`
+   SELECT id as userId, name, "imageProfile" FROM users 
+   WHERE id NOT IN (SELECT "followedId" FROM follows WHERE follows."userId" = $1) 
+   AND name ILIKE '${userName}%'
+   ORDER BY name ASC    
+   LIMIT 8`,[userId])
+   
+  const users = mountOutput(followedsUsers, unFollowedUsers)
+  return users
 
 }
+
+function mountOutput(lst1, lst2){
+  let output = []
+  output = [...lst1, ...lst2]
+  return output
+}
+
 
 async function FindUser(id) {
   const { rows: users } = await connection.query(
