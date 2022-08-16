@@ -134,11 +134,19 @@ async function updatePostById(text, postId) {
 }
 
 async function deletePost(postId) {
-  return connection.query(`
+  return connection.query(
+    `
         DELETE FROM posts 
         WHERE id = $1;
-    `, [postId])
+    `,
+    [postId]
+  );
+}
 
+async function countPosts() {
+  return connection.query(`
+    SELECT COUNT("id") as count FROM posts;
+  `);
 }
 
 const postsRepository = {
@@ -150,7 +158,8 @@ const postsRepository = {
   deleteHashtagsPosts,
   updatePostById,
   getPostsByUserId,
-  deletePost
-}
+  deletePost,
+  countPosts,
+};
 
 export default postsRepository;

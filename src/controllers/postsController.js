@@ -107,11 +107,20 @@ export async function deletePost(req, res) {
     if (!result.rowCount) {
       return res.status(401).send("Esse post não pertence ao usuário logado");
     }
-    
+
     await postsRepository.deletePost(postId);
     return res.sendStatus(200);
-
   } catch (error) {
+    res.sendStatus(500);
+  }
+}
+
+export async function countPosts(req, res) {
+  try {
+    const { rows: posts } = await postsRepository.countPosts();
+
+    return res.send(posts[0]).status(200);
+  } catch (err) {
     res.sendStatus(500);
   }
 }
