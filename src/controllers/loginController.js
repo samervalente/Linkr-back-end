@@ -22,7 +22,6 @@ export async function loginUser(req, res) {
 
     const token = jwt.sign(data, secret);
     const imageProfile = inPostgres[0].imageProfile;
-    //const token = uuid();
     res.status(200).send({ token, imageProfile });
   } else {
     res.status(401).send();
