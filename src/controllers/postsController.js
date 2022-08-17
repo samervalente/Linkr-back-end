@@ -45,7 +45,7 @@ export async function fetchPosts(req, res) {
     if (page) {
       offset = page*10;
     }
-    const posts = await postsRepository.fetchPosts(offset);
+    const posts = await postsRepository.fetchPosts(userId, offset);
     const sendPosts = { userId: Number(userId), posts: posts.rows };
     return res.send(sendPosts).status(200);
   } catch (err) {
