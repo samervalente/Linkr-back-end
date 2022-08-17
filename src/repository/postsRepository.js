@@ -24,7 +24,7 @@ async function fetchPosts() {
         SELECT posts.*, users."imageProfile", users.name
         FROM posts JOIN users ON posts."userId" = users.id
         ORDER BY "createdAt" DESC 
-        LIMIT 20
+        LIMIT 10
     `);
 }
 
@@ -92,7 +92,8 @@ async function getPostsByHashtagName(name) {
     JOIN users
     ON users.id = "userId"
     WHERE ht.name = $1 
-    ORDER BY p."createdAt" DESC`,
+    ORDER BY p."createdAt" DESC
+    LIMIT 10`,
     [name]
   );
 
