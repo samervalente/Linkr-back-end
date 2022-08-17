@@ -189,27 +189,6 @@ async function setRepost(postId, userId){
   )
 }
 
-async function getReposts(){
-  return connection.query(
-    `SELECT 
-      COUNT(reposts."postId") AS "qtdReposts", posts.id, posts.url, 
-      posts."userId", posts.description, posts."urlTitle", posts."urlImage", 
-      posts."urlDescription", reposts."createdAt", reposts."userId" AS "reposterId", 
-      users."imageProfile", users.name, reposters.name AS "reposterName"
-    FROM reposts
-    JOIN posts
-    ON reposts."postId" = posts.id
-    JOIN users
-    ON posts."userId" = users.id
-    JOIN users "reposters"
-    ON reposters.id = reposts."userId"
-    GROUP BY 
-      posts.id, reposts."createdAt", reposts."userId", 
-      users."imageProfile", users.name, reposters.name
-    ORDER BY reposts."createdAt" DESC 
-    LIMIT 20;`
-  )
-}
 
 const postsRepository = {
   publishUrl,
@@ -222,8 +201,7 @@ const postsRepository = {
   getPostsByUserId,
   deletePost,
   countPosts,
-  setRepost, 
-  getReposts
+  setRepost
 };
 
 export default postsRepository;
