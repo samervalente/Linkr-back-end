@@ -19,13 +19,23 @@ async function publishUrl(url, text, userId, title, image, description) {
   await insertHashtags(hashtags, postId);
 }
 
-async function fetchPosts() {
+// async function fetchPosts() {
+//   return connection.query(`
+//         SELECT posts.*, users."imageProfile", users.name
+//         FROM posts JOIN users ON posts."userId" = users.id
+//         ORDER BY "createdAt" DESC 
+//         LIMIT 20
+//     `);
+// }
+
+async function fetchPosts(offset) {
   return connection.query(`
         SELECT posts.*, users."imageProfile", users.name
         FROM posts JOIN users ON posts."userId" = users.id
         ORDER BY "createdAt" DESC 
-        LIMIT 20
-    `);
+        OFFSET $1
+        LIMIT 10
+    `, [offset]);
 }
 
 async function insertHashtags(hashtags, postId) {
