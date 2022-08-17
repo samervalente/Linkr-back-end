@@ -48,7 +48,8 @@ export async function fetchPosts(req, res) {
     const posts = await postsRepository.fetchPosts(userId, offset);
     const sendPosts = { userId: Number(userId), posts: posts.rows };
     return res.send(sendPosts).status(200);
-  } catch (err) {
+
+  } catch(err) {
     res.sendStatus(500);
   }
 }
@@ -126,6 +127,7 @@ export async function deletePost(req, res) {
 
     await postsRepository.deletePost(postId);
     return res.sendStatus(200);
+    
   } catch (error) {
     res.sendStatus(500);
   }
@@ -137,6 +139,20 @@ export async function countPosts(req, res) {
 
     return res.send(posts[0]).status(200);
   } catch (err) {
+    res.sendStatus(500);
+  }
+}
+
+export async function setRepost(req, res){
+  try{
+    const userId = res.locals.userId;
+    const postId = req.params.id;
+
+    await postsRepository.setRepost(postId, userId);
+    
+    return res.sendStatus(201);
+    
+  }catch(err){
     res.sendStatus(500);
   }
 }
