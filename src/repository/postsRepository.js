@@ -33,7 +33,6 @@ async function fetchPosts(offset) {
         SELECT posts.*, users."imageProfile", users.name
         FROM posts JOIN users ON posts."userId" = users.id
         ORDER BY "createdAt" DESC 
-        LIMIT 10
         OFFSET $1
         LIMIT 10
     `, [offset]);
