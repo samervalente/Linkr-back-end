@@ -26,17 +26,27 @@ export async function publishPost(req, res) {
   }
 }
 
+// export async function fetchPosts(req, res) {
+//   const userId = res.locals.userId;
+//   try {
+//     const posts = await postsRepository.fetchPosts();
+//     const sendPosts = { userId: Number(userId), posts: posts.rows };
+//     return res.send(sendPosts).status(200);
+//   } catch (err) {
+//     res.sendStatus(500);
+//   }
+// }
+
 export async function fetchPosts(req, res) {
   const userId = res.locals.userId;
+  const { page } = req.query;
+  let offset = null;
   try {
-    const posts = await postsRepository.fetchPosts();
-    const reposts = await postsRepository.getReposts();
-
-    const ordenedPosts = [...posts.rows, ...reposts.rows].sort((a, b) => b.createdAt - a.createdAt)
-    const allPosts = ordenedPosts.length <= 20 ? ordenedPosts : ordenedPosts.slice(0, 20)
-
-    const sendPosts = { userId: Number(userId), posts: allPosts };
-   
+    if (page) {
+      offset = page*10;
+    }
+    const posts = await postsRepository.fetchPosts(userId, offset);
+    const sendPosts = { userId: Number(userId), posts: posts.rows };
     return res.send(sendPosts).status(200);
 
   } catch(err) {

@@ -19,10 +19,11 @@ export async function loginUser(req, res) {
     const data = inPostgres[0].id;
     const secret = process.env.JWT_SECRET;
     //const config = { expiresIn: 2592000 };
-
+    
     const token = jwt.sign(data, secret);
     const imageProfile = inPostgres[0].imageProfile;
-    res.status(200).send({ token, imageProfile });
+    const userId = inPostgres[0].id
+    res.status(200).send({ token, imageProfile, userId });
   } else {
     res.status(401).send();
   }

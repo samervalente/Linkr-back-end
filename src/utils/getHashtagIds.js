@@ -14,11 +14,8 @@ export default function getHashtagsIds(string){
                      }
                  })
              
-                 for(let hashtag of arrHashtags){
-                    
-                    hashtag = hashtag.replaceAll(",","").replace(/[\r\n\\/?!]/gm, '')
-                    
-
+                 for(let hashtag of arrHashtags){                
+                    hashtag = hashtag.replaceAll(",","").replace(/[\r\n\\/?!]/gm, '')          
                      filt.push(hashtag)
                  }
                 
