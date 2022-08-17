@@ -53,6 +53,16 @@ async function fetchPosts(userId, offset) {
     JOIN users 
     ON posts."userId" = users.id
     WHERE "userId" = $1
+    UNION ALL
+    SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
+    FROM reposts
+    JOIN posts
+    ON reposts."postId" = posts.id
+    JOIN users
+    ON posts."userId" = users.id
+    JOIN users "reposters"
+    ON reposters.id = reposts."userId"
+    WHERE reposts."userId" = $1
     ORDER BY "createdAt" DESC
     OFFSET $2
     LIMIT 10;
