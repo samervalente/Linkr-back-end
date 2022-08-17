@@ -114,7 +114,6 @@ async function getTrending() {
 async function getPostsByHashtagName(name) {
   const { rows: posts } = await connection.query(
     `SELECT p.*, users.name as name, users."imageProfile"
-
     FROM hashtagsposts h
     JOIN posts p
     ON p.id = h."postId"
@@ -124,6 +123,7 @@ async function getPostsByHashtagName(name) {
     ON users.id = "userId"
     WHERE ht.name = $1 
     ORDER BY p."createdAt" DESC
+    OFFSET 0
     LIMIT 10`,
     [name]
   );
@@ -132,13 +132,25 @@ async function getPostsByHashtagName(name) {
 }
 
 async function getPostsByUserId(userId) {
-  const { rows: posts } = await connection.query(
-    `SELECT posts.*, users.name as name, users."imageProfile"
-    FROM posts
-    JOIN users
-    ON posts."userId" = users.id
-    WHERE posts."userId" = $1
-    ORDER BY posts."createdAt" DESC`,
+  const { rows: posts } = await connection.query(`
+  SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
+  FROM reposts
+  JOIN posts
+  ON reposts."postId" = posts.id
+  JOIN users
+  ON posts."userId" = users.id
+  JOIN users "reposters"
+  ON reposters.id = reposts."userId"
+  WHERE reposts."userId" = $1
+  UNION ALL
+  SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", posts."createdAt", users."imageProfile", users.name, NULL AS "reposterId" , NULL AS "reposterName"
+  FROM posts 
+  JOIN users 
+  ON posts."userId" = users.id
+  WHERE posts."userId" = $1
+  ORDER BY "createdAt" DESC
+  OFFSET 0
+  LIMIT 10;`,
     [userId]
   );
   return posts;
