@@ -22,7 +22,6 @@ async function checkPostByUserId(postId, userId) {
 }
 
 
-
 async function SearchUsers(userName, userId) {
 
   const {rows: followedsUsers} = await connection.query(`SELECT users.id as userId, name, follows."userId" as followedBy, "imageProfile" FROM users
