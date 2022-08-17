@@ -28,14 +28,35 @@ async function publishUrl(url, text, userId, title, image, description) {
 //     `);
 // }
 
-async function fetchPosts(offset) {
+async function fetchPosts(userId, offset) {
   return connection.query(`
-        SELECT posts.*, users."imageProfile", users.name
-        FROM posts JOIN users ON posts."userId" = users.id
-        ORDER BY "createdAt" DESC 
-        OFFSET $1
-        LIMIT 10
-    `, [offset]);
+    SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
+    FROM reposts
+    JOIN posts
+    ON reposts."postId" = posts.id
+    JOIN users
+    ON posts."userId" = users.id
+    JOIN users "reposters"
+    ON reposters.id = reposts."userId"
+    JOIN follows
+    ON follows."followedId" = posts."userId" AND follows."userId" = $1
+    UNION ALL
+    SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", posts."createdAt", users."imageProfile", users.name, NULL AS "reposterId" , NULL AS "reposterName"
+    FROM posts 
+    JOIN users 
+    ON posts."userId" = users.id
+    JOIN follows
+    ON follows."followedId" = posts."userId" AND follows."userId" = $1
+    UNION ALL
+    SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", posts."createdAt", users."imageProfile", users.name, NULL AS "reposterId" , NULL AS "reposterName"
+    FROM posts 
+    JOIN users 
+    ON posts."userId" = users.id
+    WHERE "userId" = $1
+    ORDER BY "createdAt" DESC
+    OFFSET $2
+    LIMIT 10;
+    `, [userId, offset]);
 }
 
 async function insertHashtags(hashtags, postId) {
