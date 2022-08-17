@@ -39,7 +39,7 @@ async function fetchPosts(userId, offset) {
     JOIN users "reposters"
     ON reposters.id = reposts."userId"
     JOIN follows
-    ON follows."followedId" = posts."userId" AND follows."userId" = $1
+    ON follows."followedId" = reposts."userId" AND follows."userId" = $1
     UNION ALL
     SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", posts."createdAt", users."imageProfile", users.name, NULL AS "reposterId" , NULL AS "reposterName"
     FROM posts 
