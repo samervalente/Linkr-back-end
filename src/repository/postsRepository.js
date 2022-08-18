@@ -141,7 +141,7 @@ async function getPostsByHashtagName(name, offset) {
   return posts;
 }
 
-async function getPostsByUserId(userId) {
+async function getPostsByUserId(userId, offset) {
   const { rows: posts } = await connection.query(`
   SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
   FROM reposts
@@ -159,9 +159,9 @@ async function getPostsByUserId(userId) {
   ON posts."userId" = users.id
   WHERE posts."userId" = $1
   ORDER BY "createdAt" DESC
-  OFFSET 0
+  OFFSET $2
   LIMIT 10;`,
-    [userId]
+    [userId, offset]
   );
   return posts;
 }
