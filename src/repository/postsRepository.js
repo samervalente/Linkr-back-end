@@ -19,13 +19,17 @@ async function publishUrl(url, text, userId, title, image, description) {
   await insertHashtags(hashtags, postId);
 }
 
-async function getFollowers(userId){
-  const {rows: following} = await connection.query('SELECT * from follows WHERE "userId" = $1',[userId])
-  return following.length > 0? true : false 
+async function getFollowers(userId) {
+  const { rows: following } = await connection.query(
+    'SELECT * from follows WHERE "userId" = $1',
+    [userId]
+  );
+  return following.length > 0 ? true : false;
 }
 
 async function fetchPosts(userId, offset) {
-  const {rows : posts} = await connection.query(`
+  const { rows: posts } = await connection.query(
+    `
     SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
     FROM reposts
     JOIN posts
@@ -62,12 +66,12 @@ async function fetchPosts(userId, offset) {
     ORDER BY "createdAt" DESC
     OFFSET $2
     LIMIT 10;
-    `, [userId, offset]);
-  
-  return posts
+    `,
+    [userId, offset]
+  );
 
+  return posts;
 }
-
 
 async function insertHashtags(hashtags, postId) {
   hashtags.map(async (hashtag) => {
@@ -142,7 +146,8 @@ async function getPostsByHashtagName(name, offset) {
 }
 
 async function getPostsByUserId(userId, offset) {
-  const { rows: posts } = await connection.query(`
+  const { rows: posts } = await connection.query(
+    `
   SELECT posts.id, posts.url, posts."userId", posts.description, posts."urlTitle", posts."urlImage", posts."urlDescription", reposts."createdAt", users."imageProfile", users.name, reposts."userId" AS "reposterId", reposters.name AS "reposterName"
   FROM reposts
   JOIN posts
@@ -197,20 +202,54 @@ async function deletePost(postId) {
   );
 }
 
-async function countPosts() {
-  return connection.query(`
-    SELECT COUNT("id") as count FROM posts;
-  `);
+async function countPosts(id) {
+  return connection.query(
+    `
+        SELECT COUNT(posts.id) as count
+        FROM reposts
+        JOIN posts
+        ON reposts."postId" = posts.id
+        JOIN users
+        ON posts."userId" = users.id
+        JOIN users "reposters"
+        ON reposters.id = reposts."userId"
+        JOIN follows
+        ON follows."followedId" = reposts."userId" AND follows."userId" = $1
+        UNION ALL
+        SELECT COUNT(posts.id) as count
+        FROM posts 
+        JOIN users 
+        ON posts."userId" = users.id
+        JOIN follows
+        ON follows."followedId" = posts."userId" AND follows."userId" = $1
+        UNION ALL
+        SELECT COUNT(posts.id) as count
+        FROM posts 
+        JOIN users 
+        ON posts."userId" = users.id
+        WHERE "userId" = $1
+        UNION ALL
+        SELECT COUNT(posts.id) as count
+        FROM reposts
+        JOIN posts
+        ON reposts."postId" = posts.id
+        JOIN users
+        ON posts."userId" = users.id
+        JOIN users "reposters"
+        ON reposters.id = reposts."userId"
+        WHERE reposts."userId" = $1
+  `,
+    [id]
+  );
 }
 
-async function setRepost(postId, userId){
+async function setRepost(postId, userId) {
   return connection.query(
     `INSERT INTO reposts ("postId", "userId" ) 
-    VALUES ($1, $2)`, 
+    VALUES ($1, $2)`,
     [postId, userId]
-  )
+  );
 }
-
 
 const postsRepository = {
   publishUrl,
@@ -224,7 +263,7 @@ const postsRepository = {
   getPostsByUserId,
   deletePost,
   countPosts,
-  setRepost
+  setRepost,
 };
 
 export default postsRepository;
