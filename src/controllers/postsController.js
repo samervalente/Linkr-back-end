@@ -30,18 +30,17 @@ export async function fetchPosts(req, res) {
   const { page } = req.query;
   let offset = null;
   try {
-    console.log(userId)
+    console.log(userId);
     if (page) {
-      offset = page*10;
+      offset = page * 10;
     }
-    const haveFolloweds = await postsRepository.getFollowers(userId)
-   
+    const haveFolloweds = await postsRepository.getFollowers(userId);
+
     const posts = await postsRepository.fetchPosts(userId, offset);
-    console.log(posts)
+    console.log(posts);
     const sendPosts = { userId: Number(userId), haveFolloweds, posts };
     return res.send(sendPosts).status(200);
-
-  } catch(err) {
+  } catch (err) {
     res.sendStatus(500);
   }
 }
@@ -62,9 +61,12 @@ export async function getPostsByHashtag(req, res) {
   let offset = null;
   try {
     if (page) {
-      offset = page*10;
+      offset = page * 10;
     }
-    const posts = await postsRepository.getPostsByHashtagName(hashtagName, offset);
+    const posts = await postsRepository.getPostsByHashtagName(
+      hashtagName,
+      offset
+    );
     const sendPosts = { userId: Number(userId), posts: posts };
     res.status(200).send(sendPosts);
   } catch (error) {
@@ -79,7 +81,7 @@ export async function getPostsByUserId(req, res) {
   let offset = null;
   try {
     if (page) {
-      offset = page*10;
+      offset = page * 10;
     }
     const posts = await postsRepository.getPostsByUserId(param, offset);
     const sendPosts = { userId: Number(userId), posts: posts };
@@ -129,33 +131,31 @@ export async function deletePost(req, res) {
 
     await postsRepository.deletePost(postId);
     return res.sendStatus(200);
-    
   } catch (error) {
-    
     res.sendStatus(500);
   }
 }
 
 export async function countPosts(req, res) {
+  const userId = res.locals.userId;
   try {
-    const { rows: posts } = await postsRepository.countPosts();
+    const { rows: posts } = await postsRepository.countPosts(userId);
 
-    return res.send(posts[0]).status(200);
+    return res.send(posts).status(200);
   } catch (err) {
     res.sendStatus(500);
   }
 }
 
-export async function setRepost(req, res){
-  try{
+export async function setRepost(req, res) {
+  try {
     const userId = res.locals.userId;
     const postId = req.params.id;
 
     await postsRepository.setRepost(postId, userId);
-    
+
     return res.sendStatus(201);
-    
-  }catch(err){
+  } catch (err) {
     res.sendStatus(500);
   }
 }
