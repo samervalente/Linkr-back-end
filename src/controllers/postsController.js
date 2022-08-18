@@ -25,18 +25,6 @@ export async function publishPost(req, res) {
     return res.status(500).send(error);
   }
 }
-
-// export async function fetchPosts(req, res) {
-//   const userId = res.locals.userId;
-//   try {
-//     const posts = await postsRepository.fetchPosts();
-//     const sendPosts = { userId: Number(userId), posts: posts.rows };
-//     return res.send(sendPosts).status(200);
-//   } catch (err) {
-//     res.sendStatus(500);
-//   }
-// }
-
 export async function fetchPosts(req, res) {
   const userId = res.locals.userId;
   const { page } = req.query;
@@ -46,15 +34,14 @@ export async function fetchPosts(req, res) {
     if (page) {
       offset = page*10;
     }
-    const response = await postsRepository.fetchPosts(userId, offset)
+    const haveFolloweds = await postsRepository.getFollowers(userId)
    
-    if(response.existsFolloweds === false){
-      return res.status(404).send({followeds:0})
-    }
-    const sendPosts = { userId: Number(userId), posts: [...response] };
+    const posts = await postsRepository.fetchPosts(userId, offset);
+    console.log(posts)
+    const sendPosts = { userId: Number(userId), haveFolloweds, posts };
     return res.send(sendPosts).status(200);
-  } catch (err) {
-    console.log(err)
+
+  } catch(err) {
     res.sendStatus(500);
   }
 }
@@ -132,7 +119,9 @@ export async function deletePost(req, res) {
 
     await postsRepository.deletePost(postId);
     return res.sendStatus(200);
+    
   } catch (error) {
+    
     res.sendStatus(500);
   }
 }
@@ -143,6 +132,20 @@ export async function countPosts(req, res) {
 
     return res.send(posts[0]).status(200);
   } catch (err) {
+    res.sendStatus(500);
+  }
+}
+
+export async function setRepost(req, res){
+  try{
+    const userId = res.locals.userId;
+    const postId = req.params.id;
+
+    await postsRepository.setRepost(postId, userId);
+    
+    return res.sendStatus(201);
+    
+  }catch(err){
     res.sendStatus(500);
   }
 }

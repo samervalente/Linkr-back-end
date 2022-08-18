@@ -3,10 +3,11 @@ import usersRepository from "../repository/usersRepository.js";
 
 async function tokenValidator(req, res, next) {
   const { authorization } = req.headers;
-  const token = authorization?.replace("Bearer ", "");
+  
   const secretKey = process.env.JWT_SECRET;
 
   try {
+    const token = authorization?.replace("Bearer ", "");
     const userId = jwt.verify(token, secretKey);
 
     const user = await usersRepository.getUserById(userId);

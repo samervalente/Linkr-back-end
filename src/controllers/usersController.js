@@ -1,10 +1,11 @@
 import usersRepository from "../repository/usersRepository.js";
 
 export async function getUsers(req, res) {
-  const { name, id } = req.query;
-  
+  const { name } = req.query;
+  const id = res.locals.userId;
+
   try {
-    const users = await usersRepository.SearchUsers(name,id);
+    const users = await usersRepository.SearchUsers(name, id);
     return res.status(200).send(users);
   } catch (error) {
     console.log(error);
@@ -26,24 +27,21 @@ export async function getUserById(req, res) {
   }
 }
 
-export async function followUser(req, res){
-  const {userId, followedId} = req.body
-  const {action} = req.query
+export async function followUser(req, res) {
+  const { userId, followedId } = req.body;
+  const { action } = req.query;
   try {
-    if(action === 'status'){
-      const status = await usersRepository.getFollowStatus(userId, followedId)
-      return res.status(200).send(status)
+    if (action === "status") {
+      const status = await usersRepository.getFollowStatus(userId, followedId);
+      return res.status(200).send(status);
     }
 
-    if(userId){
-      await usersRepository.followUser(userId, followedId, action)
-      res.sendStatus(200)
+    if (userId) {
+      await usersRepository.followUser(userId, followedId, action);
+      res.sendStatus(200);
     }
-    
   } catch (error) {
-    console.log(error)
-    res.status(500).send(error)
+    console.log(error);
+    res.status(500).send(error);
   }
 }
-
-
