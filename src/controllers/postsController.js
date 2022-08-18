@@ -75,8 +75,13 @@ export async function getPostsByHashtag(req, res) {
 export async function getPostsByUserId(req, res) {
   const param = req.params.id;
   const userId = res.locals.userId;
+  const { page } = req.query;
+  let offset = null;
   try {
-    const posts = await postsRepository.getPostsByUserId(param);
+    if (page) {
+      offset = page*10;
+    }
+    const posts = await postsRepository.getPostsByUserId(param, offset);
     const sendPosts = { userId: Number(userId), posts: posts };
     res.status(200).send(sendPosts);
   } catch (error) {
