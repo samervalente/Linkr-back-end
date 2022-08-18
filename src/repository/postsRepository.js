@@ -121,9 +121,9 @@ async function getTrending() {
   return trending;
 }
 
-async function getPostsByHashtagName(name) {
+async function getPostsByHashtagName(name, offset) {
   const { rows: posts } = await connection.query(
-    `SELECT p.*, users.name as name, users."imageProfile"
+    `SELECT p.*, users.name as name, users."imageProfile", NULL AS "reposterId" , NULL AS "reposterName"
     FROM hashtagsposts h
     JOIN posts p
     ON p.id = h."postId"
@@ -133,9 +133,9 @@ async function getPostsByHashtagName(name) {
     ON users.id = "userId"
     WHERE ht.name = $1 
     ORDER BY p."createdAt" DESC
-    OFFSET 0
+    OFFSET $2
     LIMIT 10`,
-    [name]
+    [name, offset]
   );
 
   return posts;
