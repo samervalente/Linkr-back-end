@@ -42,13 +42,19 @@ export async function fetchPosts(req, res) {
   const { page } = req.query;
   let offset = null;
   try {
+    console.log(userId)
     if (page) {
       offset = page*10;
     }
-    const posts = await postsRepository.fetchPosts(offset);
-    const sendPosts = { userId: Number(userId), posts: posts.rows };
+    const response = await postsRepository.fetchPosts(userId, offset)
+   
+    if(response.existsFolloweds === false){
+      return res.status(404).send({followeds:0})
+    }
+    const sendPosts = { userId: Number(userId), posts: [...response] };
     return res.send(sendPosts).status(200);
   } catch (err) {
+    console.log(err)
     res.sendStatus(500);
   }
 }
