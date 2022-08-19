@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.4 (Ubuntu 14.4-1.pgdg22.04+1)
--- Dumped by pg_dump version 14.4 (Ubuntu 14.4-1.pgdg22.04+1)
+-- Dumped from database version 14.4 (Ubuntu 14.4-1.pgdg20.04+1)
+-- Dumped by pg_dump version 14.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,23 +21,25 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: hashtags; Type: TABLE; Schema: public; Owner: postgres
+-- Name: comments; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE TABLE public.hashtags (
-    id integer NOT NULL,
-    name text NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+CREATE TABLE "public"."comments" (
+    "id" integer NOT NULL,
+    "content" character varying(255) NOT NULL,
+    "postId" integer NOT NULL,
+    "userId" integer NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE public.hashtags OWNER TO postgres;
+ALTER TABLE public.comments OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: hashtags_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE SEQUENCE public.hashtags_id_seq
+CREATE SEQUENCE "public"."comments_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -46,34 +48,105 @@ CREATE SEQUENCE public.hashtags_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.hashtags_id_seq OWNER TO postgres;
+ALTER TABLE public.comments_id_seq OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: hashtags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER SEQUENCE public.hashtags_id_seq OWNED BY public.hashtags.id;
+ALTER SEQUENCE "public"."comments_id_seq" OWNED BY "public"."comments"."id";
 
 
 --
--- Name: hashtagsposts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: follows; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE TABLE public.hashtagsposts (
-    id integer NOT NULL,
+CREATE TABLE "public"."follows" (
+    "id" integer NOT NULL,
+    "userId" integer NOT NULL,
+    "followedId" integer NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE public.follows OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: follows_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+CREATE SEQUENCE "public"."follows_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.follows_id_seq OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: follows_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER SEQUENCE "public"."follows_id_seq" OWNED BY "public"."follows"."id";
+
+
+--
+-- Name: hashtags; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+CREATE TABLE "public"."hashtags" (
+    "id" integer NOT NULL,
+    "name" "text" NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE public.hashtags OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: hashtags_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+CREATE SEQUENCE "public"."hashtags_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hashtags_id_seq OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: hashtags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER SEQUENCE "public"."hashtags_id_seq" OWNED BY "public"."hashtags"."id";
+
+
+--
+-- Name: hashtagsposts; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+CREATE TABLE "public"."hashtagsposts" (
+    "id" integer NOT NULL,
     "postId" integer NOT NULL,
     "hashtagId" integer NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE public.hashtagsposts OWNER TO postgres;
+ALTER TABLE public.hashtagsposts OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: hashtagsposts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: hashtagsposts_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE SEQUENCE public.hashtagsposts_id_seq
+CREATE SEQUENCE "public"."hashtagsposts_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -82,34 +155,34 @@ CREATE SEQUENCE public.hashtagsposts_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.hashtagsposts_id_seq OWNER TO postgres;
+ALTER TABLE public.hashtagsposts_id_seq OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: hashtagsposts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: hashtagsposts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER SEQUENCE public.hashtagsposts_id_seq OWNED BY public.hashtagsposts.id;
+ALTER SEQUENCE "public"."hashtagsposts_id_seq" OWNED BY "public"."hashtagsposts"."id";
 
 
 --
--- Name: likes; Type: TABLE; Schema: public; Owner: postgres
+-- Name: likes; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE TABLE public.likes (
-    id integer NOT NULL,
+CREATE TABLE "public"."likes" (
+    "id" integer NOT NULL,
     "postId" integer NOT NULL,
     "userId" integer NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE public.likes OWNER TO postgres;
+ALTER TABLE public.likes OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: likes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: likes_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE SEQUENCE public.likes_id_seq
+CREATE SEQUENCE "public"."likes_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -118,38 +191,38 @@ CREATE SEQUENCE public.likes_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.likes_id_seq OWNER TO postgres;
+ALTER TABLE public.likes_id_seq OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: likes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: likes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER SEQUENCE public.likes_id_seq OWNED BY public.likes.id;
+ALTER SEQUENCE "public"."likes_id_seq" OWNED BY "public"."likes"."id";
 
 
 --
--- Name: posts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: posts; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE TABLE public.posts (
-    id integer NOT NULL,
-    url text NOT NULL,
-    description character varying(255),
+CREATE TABLE "public"."posts" (
+    "id" integer NOT NULL,
+    "url" "text" NOT NULL,
+    "description" character varying(255),
     "userId" integer NOT NULL,
-    "urlTitle" text,
-    "urlImage" text,
-    "urlDescription" text NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+    "urlTitle" "text",
+    "urlImage" "text",
+    "urlDescription" "text" NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE public.posts OWNER TO postgres;
+ALTER TABLE public.posts OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: posts_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE SEQUENCE public.posts_id_seq
+CREATE SEQUENCE "public"."posts_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -158,36 +231,34 @@ CREATE SEQUENCE public.posts_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.posts_id_seq OWNER TO postgres;
+ALTER TABLE public.posts_id_seq OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER SEQUENCE public.posts_id_seq OWNED BY public.posts.id;
+ALTER SEQUENCE "public"."posts_id_seq" OWNED BY "public"."posts"."id";
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: reposts; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE TABLE public.users (
-    id integer NOT NULL,
-    name text NOT NULL,
-    email text NOT NULL,
-    password text NOT NULL,
-    "imageProfile" text NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT now() NOT NULL
+CREATE TABLE "public"."reposts" (
+    "id" integer NOT NULL,
+    "postId" integer NOT NULL,
+    "userId" integer NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 
-ALTER TABLE public.users OWNER TO postgres;
+ALTER TABLE public.reposts OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: reposts_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-CREATE SEQUENCE public.users_id_seq
+CREATE SEQUENCE "public"."reposts_id_seq"
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -196,311 +267,520 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO postgres;
+ALTER TABLE public.reposts_id_seq OWNER TO zfatbtsgvywdbs;
 
 --
--- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: reposts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
-
-
---
--- Name: hashtags id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.hashtags ALTER COLUMN id SET DEFAULT nextval('public.hashtags_id_seq'::regclass);
+ALTER SEQUENCE "public"."reposts_id_seq" OWNED BY "public"."reposts"."id";
 
 
 --
--- Name: hashtagsposts id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.hashtagsposts ALTER COLUMN id SET DEFAULT nextval('public.hashtagsposts_id_seq'::regclass);
+CREATE TABLE "public"."users" (
+    "id" integer NOT NULL,
+    "name" "text" NOT NULL,
+    "email" "text" NOT NULL,
+    "password" "text" NOT NULL,
+    "imageProfile" "text" NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT "now"() NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+CREATE SEQUENCE "public"."users_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO zfatbtsgvywdbs;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER SEQUENCE "public"."users_id_seq" OWNED BY "public"."users"."id";
 
 
 --
--- Name: likes id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: comments id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.likes ALTER COLUMN id SET DEFAULT nextval('public.likes_id_seq'::regclass);
-
-
---
--- Name: posts id; Type: DEFAULT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.posts ALTER COLUMN id SET DEFAULT nextval('public.posts_id_seq'::regclass);
+ALTER TABLE ONLY "public"."comments" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."comments_id_seq"'::"regclass");
 
 
 --
--- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: follows id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+ALTER TABLE ONLY "public"."follows" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."follows_id_seq"'::"regclass");
 
 
 --
--- Data for Name: hashtags; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Name: hashtags id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-COPY public.hashtags (id, name, "createdAt") FROM stdin;
-116	trello	2022-08-11 11:41:19.256852-03
-117	figma	2022-08-11 11:41:51.288719-03
-118	github	2022-08-11 11:45:36.742115-03
-119	tiozao	2022-08-11 11:49:18.602228-03
-120	css	2022-08-11 11:49:18.650159-03
-121	dale	2022-08-11 11:51:47.973684-03
-122	vamo	2022-08-11 11:51:48.052236-03
-123	ou	2022-08-11 11:51:48.053893-03
-124	test	2022-08-11 11:54:14.787881-03
-125	bike	2022-08-11 11:54:14.828343-03
-126	bikezinha	2022-08-11 11:54:32.290898-03
-127	motor	2022-08-11 11:54:32.327185-03
-128	aipapai	2022-08-11 11:55:20.422142-03
-129	claro	2022-08-11 11:55:20.480032-03
-130	vrau	2022-08-11 12:27:22.094097-03
-131	amizade	2022-08-11 15:46:53.042287-03
-132	nirvana	2022-08-11 16:19:14.532977-03
-133	bikeee	2022-08-11 16:26:35.310419-03
-134	base	2022-08-11 19:09:52.906181-03
-135	oi	2022-08-11 19:17:30.607614-03
-136	foi	2022-08-11 20:15:09.935137-03
-137	el	2022-08-11 20:21:35.250118-03
-138	opa	2022-08-11 20:22:21.532763-03
-139	nirvana?	2022-08-11 20:23:17.80586-03
-140	osh	2022-08-11 20:24:19.712993-03
-141	daleee	2022-08-11 20:40:43.66142-03
-142	csgo	2022-08-11 20:49:36.322653-03
-143	mingau	2022-08-11 20:51:15.110788-03
-144	repo	2022-08-11 20:54:20.658436-03
-145	bb	2022-08-11 20:56:34.944179-03
+ALTER TABLE ONLY "public"."hashtags" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."hashtags_id_seq"'::"regclass");
+
+
+--
+-- Name: hashtagsposts id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."hashtagsposts" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."hashtagsposts_id_seq"'::"regclass");
+
+
+--
+-- Name: likes id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."likes" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."likes_id_seq"'::"regclass");
+
+
+--
+-- Name: posts id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."posts" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."posts_id_seq"'::"regclass");
+
+
+--
+-- Name: reposts id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."reposts" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."reposts_id_seq"'::"regclass");
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."users" ALTER COLUMN "id" SET DEFAULT "nextval"('"public"."users_id_seq"'::"regclass");
+
+
+--
+-- Data for Name: comments; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+COPY "public"."comments" ("id", "content", "postId", "userId", "createdAt") FROM stdin;
+1	comentário teste 1	63	4	2022-08-16 13:48:32.00568+00
+3	comentário teste 2	63	4	2022-08-16 13:49:10.898186+00
+4	comentário teste 3	64	4	2022-08-16 13:51:24.599777+00
+5	comentário teste 3	64	4	2022-08-16 14:26:58.348094+00
+6	mais um teste	66	4	2022-08-16 14:28:04.622224+00
+8	comentáriooooo	63	12	2022-08-16 19:27:06.391079+00
+9	testerrr	63	4	2022-08-16 20:12:09.271786+00
+10	OI	63	4	2022-08-16 20:38:08.152643+00
+12	aaaaa	66	4	2022-08-16 20:56:15.746432+00
+13	teste	64	3	2022-08-16 21:41:54.842281+00
+14	oi!	72	3	2022-08-16 23:10:22.033574+00
+15	comentario 	73	4	2022-08-16 23:36:19.895453+00
+16	lala	74	4	2022-08-16 23:39:57.673674+00
+17	oi	75	11	2022-08-16 23:44:24.806161+00
+19	testeeeee	78	11	2022-08-16 23:57:34.385201+00
+20	outro teste	78	11	2022-08-16 23:58:17.506632+00
+21	oiiii, bão?	72	8	2022-08-17 03:00:00.939384+00
+22	bão, bão?	72	3	2022-08-17 03:45:22.497199+00
+23	hi	75	10	2022-08-17 13:46:32.0061+00
+24	comentei	95	4	2022-08-17 19:06:02.888966+00
+25	comentário	94	4	2022-08-17 19:06:15.873482+00
+26	true	3	10	2022-08-18 13:19:36.293492+00
+27	ihaaaa	106	11	2022-08-18 13:31:00.486254+00
 \.
 
 
 --
--- Data for Name: hashtagsposts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: follows; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-COPY public.hashtagsposts (id, "postId", "hashtagId", "createdAt") FROM stdin;
-68	19	117	2022-08-11 20:50:25.162195-03
-70	22	143	2022-08-11 20:51:15.118281-03
-71	21	143	2022-08-11 20:51:32.103462-03
-73	3	135	2022-08-11 20:52:00.451148-03
-74	11	124	2022-08-11 20:52:47.449509-03
-75	6	124	2022-08-11 20:53:01.949258-03
-76	23	144	2022-08-11 20:54:20.666132-03
-34	14	124	2022-08-11 20:10:54.618121-03
-54	7	126	2022-08-11 20:29:51.121331-03
-56	8	135	2022-08-11 20:43:02.533861-03
-60	4	122	2022-08-11 20:45:55.86935-03
-61	4	118	2022-08-11 20:45:55.869703-03
-62	18	118	2022-08-11 20:46:22.143443-03
-64	20	126	2022-08-11 20:47:47.87423-03
+COPY "public"."follows" ("id", "userId", "followedId", "createdAt") FROM stdin;
+13	10	12	2022-08-16 20:07:57.308792+00
+39	10	9	2022-08-16 21:12:45.240745+00
+40	4	3	2022-08-16 23:18:41.906853+00
+41	11	4	2022-08-16 23:28:04.999587+00
+44	10	4	2022-08-16 23:42:59.612912+00
+46	3	11	2022-08-17 03:44:25.2723+00
+49	13	4	2022-08-17 13:14:51.330277+00
+50	13	3	2022-08-17 13:15:04.133534+00
+51	13	12	2022-08-17 13:19:47.352245+00
+53	10	5	2022-08-17 13:48:19.145213+00
+54	9	8	2022-08-17 16:58:27.168617+00
+55	4	11	2022-08-17 19:07:06.724554+00
+57	14	4	2022-08-17 21:50:27.051168+00
+58	14	7	2022-08-17 22:29:15.88899+00
+59	12	14	2022-08-17 22:52:43.69686+00
+60	7	4	2022-08-17 23:27:13.485516+00
+61	7	14	2022-08-17 23:27:21.769483+00
+63	15	10	2022-08-18 13:23:26.084453+00
+64	15	12	2022-08-18 13:42:27.302944+00
 \.
 
 
 --
--- Data for Name: likes; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: hashtags; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-COPY public.likes (id, "postId", "userId", "createdAt") FROM stdin;
-5	6	24	2022-08-11 18:28:26.376514-03
-9	12	24	2022-08-11 18:29:26.905216-03
-11	13	24	2022-08-11 18:45:32.946971-03
-13	5	24	2022-08-11 19:00:28.465759-03
-20	15	24	2022-08-11 19:58:16.109381-03
-21	4	24	2022-08-11 19:58:54.960005-03
-22	18	24	2022-08-11 20:21:41.038788-03
-23	9	24	2022-08-11 20:29:54.701327-03
-25	20	24	2022-08-11 20:43:25.310202-03
-30	21	24	2022-08-11 20:50:11.712327-03
-31	14	24	2022-08-11 20:53:05.73023-03
-35	25	24	2022-08-12 17:22:27.049715-03
-36	24	24	2022-08-12 17:26:44.999055-03
-37	7	24	2022-08-14 11:04:20.875439-03
+COPY "public"."hashtags" ("id", "name", "createdAt") FROM stdin;
+21	react	2022-08-11 18:20:40.521099
+22	noticias	2022-08-11 19:37:03.347591
+23	figma	2022-08-11 19:37:35.157463
+24	jwt	2022-08-11 19:39:08.500951
+25	auth	2022-08-11 19:39:09.356664
+26	teste	2022-08-12 17:53:30.548753
+27	testando	2022-08-14 13:27:30.62553
+28	html	2022-08-14 13:33:23.210457
+29	testeeeee	2022-08-14 14:11:30.667603
+30	dayjs	2022-08-15 01:20:28.748279
+31	gato	2022-08-15 01:45:21.853804
+32	maisum	2022-08-16 00:53:52.676927
+33	driven	2022-08-16 01:45:59.6786
+34	um	2022-08-16 13:06:53.466167
+35	dois	2022-08-16 13:07:20.299725
+36	tres	2022-08-16 13:08:04.155712
+37	quatro	2022-08-16 13:11:37.569057
+38	heroku	2022-08-16 19:58:55.37583
+39	dog	2022-08-16 22:47:58.941571
 \.
 
 
 --
--- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: hashtagsposts; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-COPY public.posts (id, url, description, "userId", "urlTitle", "urlImage", "urlDescription", "createdAt") FROM stdin;
-2	https://trello.com/c/lWJyzZoJ/7-como-usu%C3%A1rio-logado-quero-ver-a-caixa-de-lista-de-hashtags-em-trending	oi	24	\N			2022-08-11 11:41:39.130231-03
-12	https://www.youtube.com/watch?v=E9MhX2TG06M	osh	24	[Full Album] N̲irva̲na - N̲eve̲rmi̲nd	https://i.ytimg.com/vi/E9MhX2TG06M/maxresdefault.jpg	[Full Album] N̲irva̲na - N̲eve̲rmi̲ndTracklist[00:00] 01. [05:02] 02. [09:18] 03. [12:57] 04. [16:02] 05. [20:19] 06. [23:13] 07. [25:37] 08. [29:21] 09. [31...	2022-08-11 15:46:52.939189-03
-15	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	osh	24	\N			2022-08-11 19:01:11.156998-03
-8	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	#oi galera	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:54:14.770502-03
-19	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	lesgo #figma	24	\N			2022-08-11 20:21:53.247498-03
-5	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	opa	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:47:49.753058-03
-13	https://www.youtube.com/watch?v=Fc4eEjnoITs	lesgo	24	Nirvana - Nevermind / lyrics videos /	https://i.ytimg.com/vi/Fc4eEjnoITs/hqdefault.jpg	Nirvana Nevermind című albumának dalszöveg videói.	2022-08-11 16:19:14.518459-03
-16	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	dale	24	\N			2022-08-11 19:04:06.006394-03
-17	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	test2	24	\N			2022-08-11 19:04:12.849699-03
-11	https://github.com/samervalente/projeto_07_instagramreact/blob/main/public/css/style.css	vamo de #test?	24	projeto_07_instagramreact/style.css at main · samervalente/projeto_07_instagramreact	https://opengraph.githubassets.com/d2d6498cc09f77bec1e4a52138bfba94657e2a699329ce8691f06c94b2e5b7cc/samervalente/projeto_07_instagramreact	Contribute to samervalente/projeto_07_instagramreact development by creating an account on GitHub.	2022-08-11 12:27:22.073609-03
-14	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	#test 	24	\N			2022-08-11 19:00:49.87678-03
-10	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	a	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:55:20.403785-03
-22	https://github.com/samervalente?tab=repositories	#mingau?	24	samervalente - Repositories	https://avatars.githubusercontent.com/u/90073210?v=4?s=400	Full Stack Web Development Student. samervalente has 31 repositories available. Follow their code on GitHub.	2022-08-11 20:49:36.306288-03
-6	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	vamo dnv de #test?	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:49:18.586194-03
-21	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	#mingau dnv?	24	\N			2022-08-11 20:23:00.697926-03
-24	https://www.youtube.com/watch?v=wrhg6r2a3U8	dale	24	Best of Lana Del Rey : melancholy	https://i.ytimg.com/vi/wrhg6r2a3U8/maxresdefault.jpg	Ngl i regret not putting carmen in here😭	2022-08-11 20:54:40.991568-03
-4	https://github.com/samervalente/projeto9_cineflex/blob/main/src/components/Movie/Movie.js	#vamo de #github	24	projeto9_cineflex/Movie.js at main · samervalente/projeto9_cineflex	https://opengraph.githubassets.com/8bc2c5ff8ee0f3980535d064acbac357f99ea6ebcbbdcde34f36cc1b0948bddd/samervalente/projeto9_cineflex	 A system for buying tickets at a cinema. Contribute to samervalente/projeto9_cineflex development by creating an account on GitHub.	2022-08-11 11:45:36.72835-03
-1	https://trello.com/c/lWJyzZoJ/7-como-usu%C3%A1rio-logado-quero-ver-a-caixa-de-lista-de-hashtags-em-trending	vamos nao	24	\N			2022-08-11 11:41:19.242745-03
-7	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	vamos de #Bikezinha	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:51:47.924134-03
-18	https://trello.com/b/QsAlQWmy/projet%C3%A3o-linkr	vamo de #github novamente?	24	\N			2022-08-11 20:21:23.951201-03
-9	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	oi	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:54:32.263765-03
-3	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=0%3A1	#oi dnv 	24	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 11:41:51.27414-03
-23	https://github.com/samervalente?tab=repositories	foi de #repo\n	24	samervalente - Repositories	https://avatars.githubusercontent.com/u/90073210?v=4?s=400	Full Stack Web Development Student. samervalente has 31 repositories available. Follow their code on GitHub.	2022-08-11 20:54:20.639316-03
-20	https://www.youtube.com/watch?v=ntZONYzAMCo	eai dnv #bikezinha?	24	Brooklyn Baby	https://i.ytimg.com/vi/ntZONYzAMCo/maxresdefault.jpg	Provided to YouTube by Universal Music GroupBrooklyn Baby · Lana Del ReyUltraviolence℗ 2014 Lana Del Rey, under exclusive licence to Polydor Ltd. (UK). Under...	2022-08-11 20:22:05.303083-03
-25	https://www.youtube.com/watch?v=wrhg6r2a3U8	asd	24	Best of Lana Del Rey : melancholy	https://i.ytimg.com/vi/wrhg6r2a3U8/maxresdefault.jpg	Ngl i regret not putting carmen in here😭	2022-08-11 20:55:00.994648-03
+COPY "public"."hashtagsposts" ("id", "postId", "hashtagId", "createdAt") FROM stdin;
+3	3	23	2022-08-11 19:37:35.292951+00
+4	4	24	2022-08-11 19:39:08.637434+00
+5	4	25	2022-08-11 19:39:09.498164+00
+12	22	31	2022-08-15 01:45:21.855732+00
+13	23	31	2022-08-15 01:47:02.640734+00
+15	32	32	2022-08-16 00:53:52.678897+00
+18	63	34	2022-08-16 13:06:53.468164+00
+19	64	35	2022-08-16 13:07:20.301765+00
+21	66	37	2022-08-16 13:11:37.571866+00
+23	72	39	2022-08-16 22:47:58.94341+00
+24	73	26	2022-08-16 23:34:22.421317+00
+25	74	35	2022-08-16 23:36:30.648356+00
+26	74	26	2022-08-16 23:36:30.64863+00
+27	75	26	2022-08-16 23:40:03.48562+00
+28	75	36	2022-08-16 23:40:03.485973+00
+29	99	26	2022-08-18 13:26:36.693236+00
+30	100	26	2022-08-18 13:27:05.869372+00
+31	101	26	2022-08-18 13:27:15.157562+00
+32	102	26	2022-08-18 13:27:35.993296+00
+33	103	26	2022-08-18 13:27:53.795039+00
+34	104	26	2022-08-18 13:28:13.505617+00
+35	105	26	2022-08-18 13:28:22.036809+00
+37	106	26	2022-08-18 13:29:34.636477+00
 \.
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: likes; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-COPY public.users (id, name, email, password, "imageProfile", "createdAt") FROM stdin;
-1	Samer	samervalente@gmail.com.br	$2b$10$eHn2waBQ5Z3Mhsc3WozsUOoU0e9K9Soz3Km2XgQUOu8u59qFYbqiK	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 10:05:26.797548-03
-6	Samer	samervalente2@gmail.com.br	$2b$10$.8.jYpYGDw2irSwHs6Mlq.5k.CL36ptNpMfFhgF.XqeaXah/xuFu.	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 12:25:13.025141-03
-7	sam	samervalente@gmail.com	$2b$10$o9UumO9P6uofXwucRdfN9uQeo9Ln34BVMENofq3r8DI5ATviCJHN6	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:25:22.37716-03
-8	sam	samervalente2@gmail.com	$2b$10$xeSXC/LJRNauT20Wbo5NFeCPqaytN8hehcaF9iWHz516rd1DL6PR2	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:25:53.546856-03
-9	sam	samervalente3@gmail.com	$2b$10$E4Zc9LTNiqVDFmaQhia61Opztw31s7mDffZHVomQK9UrbDWjM1A4a	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:42:47.032087-03
-10	sam	samervalente4@gmail.com	$2b$10$LRwbeNpE9aC9SXCXvOR2TuJV4MVgkU8NOFMu2rNoNmhH1fsViGppm	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:43:43.924012-03
-11	sam	samervalente5@gmail.com	$2b$10$tPPDK6WqjRaSp8NAIbODiOHqrKR2brwcJR0FBvoQXDpzUVu3TzcSm	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:44:17.53789-03
-12	sam	samervalente6@gmail.com	$2b$10$LplSfzeIpI2aOPdF43INSubNlcdM5TfrWXdiUYVUBE0BUsOsxAQae	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:44:23.834577-03
-13	sam	samervalente7@gmail.com	$2b$10$VzenErnmjQifzenEMXkvxuGHMbZXR4iNRJa9G5XqHpW.AgZ3y2vl2	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:44:52.927624-03
-14	sam	samervalente8@gmail.com	$2b$10$6fZn8ZVDiiBBlPvCiAXMw.dPUGFqqRYZQmohbEdb8SedPMiWAbSsK	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:45:22.71816-03
-15	sam	samervalente9@gmail.com	$2b$10$8oQQljLIshnTU446VmYkLew5xbkbMMsGwq/VMl6wLE03Cr1fkdxni	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:46:02.922622-03
-16	sam	samervalente10@gmail.com	$2b$10$IW8QGieaW32KWbaUBM.1puZh/yYhI1pHvK72LV4ruHMDA6uJI0Qv6	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:46:16.5312-03
-17	sam	samervalente11@gmail.com	$2b$10$yM7VGSW/BnQkR4pcvUhUV.pt5gkAABRn3zbpDFV9lcoc1r7SGF3r2	https://ddragon.leagueoflegends.com/cdn/img/champion/splash/Zed_30.jpg	2022-08-09 12:46:59.802737-03
-18	sam	samervalente23@gmail.com	$2b$10$f839RUtQQitl/5TLvBUxpu9A.KYw126r639y/pg5Sl4o20OzY9HmO	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 12:49:14.37779-03
-19	sam	samervalente234@gmail.com	$2b$10$Z0cKoCMOAL3ZxwLYNbWdt.phehj/X/dKu.obZRsh1wLbqNAHJmwYu	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 13:08:43.932197-03
-20	sam	samervalente23234@gmail.com	$2b$10$K6dG6Ns1fTs6U3jNVegDTu1clXwYIZz5BbYIP8mDvIU07/neZ5Am6	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 13:09:00.939034-03
-21	sam	samervalente2323234@gmail.com	$2b$10$oD7Rh0SckFoYJxuip6GOce96Ycm/fiqaQwW74qSgAhhsXiJDW2mCa	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 13:09:04.658547-03
-22	sam	samervalente232233234@gmail.com	$2b$10$1oFCmR6tEntRXLMxCm5j0uF04iHDORjpn4rtycht6Kh7HjXkxgR0O	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-09 13:09:16.059979-03
-23	Samer	samervalente232@gmail.com	$2b$10$9T9z8POSyl7F4efNXeucX.opj8yXqZJRx7o254nFR7985sW4BW8yq	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-10 09:16:46.301832-03
-24	sam	sanduba123@gmail.com	$2b$10$SRKFww4qK2Mhx3kuNeO7OuMReFJUXMU14KG8fsHmtxeocLBgek3YO	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-10 09:17:31.093362-03
-25	sam	sanduba@gmail.com	$2b$10$SHKKCGsqxSCQugNOayxUP.XkDreXZaEW70Hhx9PY5vA236u9MYvfy	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-10 09:18:42.651146-03
-26	jhin	jhin@gmail.com	$2b$10$FClP830lmrxkrwgXfduU.uSo5/mTxsw4cZT7i/N7Tzd.GobspfaSu	https://i.pinimg.com/originals/c3/22/f6/c322f6bc7198a7fc0b016880b168fdeb.jpg	2022-08-12 14:51:19.120204-03
-27	janna da silva	janna@gmail.com	$2b$10$xu4hbzAl72qr3MYMEXGzV.D1XB5JDm4jx8W9/kM3kteSWhcfEDhP.	https://i.pinimg.com/originals/c2/be/db/c2bedb3f8bde0e7beafb52df04413692.jpg	2022-08-12 14:52:03.592846-03
-28	ahri	ahri@gmail.com	$2b$10$BxlDiZOBS.BwrdvI7q3a8egJ1fufOBgZ9189MP5Hf/XpJ6O6Xc2OS	https://i.pinimg.com/originals/a2/5a/89/a25a89c12e0fd087eae85fb348ca553c.jpg	2022-08-12 14:52:36.81799-03
-29	aatrox	aatrox@gmail.com	$2b$10$ymG.W3TcfcbVrsXIjtL2NedIJjm1IN1DJeV1EM.jimViXhH4e1f6O	https://assets.mycast.io/actor_images/actor-aatrox-328492_large.jpg?1640064580	2022-08-12 14:53:59.225864-03
+COPY "public"."likes" ("id", "postId", "userId", "createdAt") FROM stdin;
+121	63	4	2022-08-16 21:39:45.44657+00
+122	72	3	2022-08-16 23:10:26.963336+00
+123	72	9	2022-08-16 23:14:40.749899+00
+124	23	9	2022-08-16 23:14:56.129896+00
+125	3	9	2022-08-16 23:15:03.61825+00
+127	78	11	2022-08-17 00:01:07.342378+00
+128	32	7	2022-08-17 02:33:14.810489+00
+130	70	8	2022-08-17 03:00:25.817952+00
+131	62	8	2022-08-17 03:00:28.313414+00
+132	92	4	2022-08-17 19:06:46.148209+00
+133	94	4	2022-08-17 19:06:48.202423+00
+134	78	4	2022-08-17 19:06:55.969794+00
+135	84	7	2022-08-17 23:04:58.313608+00
+137	73	10	2022-08-18 13:18:14.9959+00
+138	70	10	2022-08-18 13:18:17.357008+00
+139	3	10	2022-08-18 13:19:28.448235+00
+140	106	11	2022-08-18 13:30:28.580543+00
+82	3	6	2022-08-12 00:48:37.469687+00
+83	4	7	2022-08-12 14:33:15.172611+00
+95	3	3	2022-08-12 21:22:04.755107+00
+97	3	7	2022-08-13 00:45:18.455055+00
+98	3	7	2022-08-13 00:45:19.093171+00
+103	19	3	2022-08-14 18:34:26.452056+00
+108	22	3	2022-08-15 01:45:47.991021+00
+109	23	3	2022-08-15 01:47:04.909913+00
+110	23	8	2022-08-15 01:47:16.799712+00
+111	4	4	2022-08-15 14:38:57.088092+00
+117	30	3	2022-08-16 00:30:35.843893+00
 \.
 
 
 --
--- Name: hashtags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+-- Data for Name: posts; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-SELECT pg_catalog.setval('public.hashtags_id_seq', 145, true);
-
-
---
--- Name: hashtagsposts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.hashtagsposts_id_seq', 78, true);
-
-
---
--- Name: likes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.likes_id_seq', 37, true);
-
-
---
--- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.posts_id_seq', 25, true);
-
-
---
--- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.users_id_seq', 29, true);
-
-
---
--- Name: hashtags hashtags_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.hashtags
-    ADD CONSTRAINT hashtags_pkey PRIMARY KEY (id);
-
-
---
--- Name: hashtagsposts hashtagsposts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.hashtagsposts
-    ADD CONSTRAINT hashtagsposts_pkey PRIMARY KEY (id);
+COPY "public"."posts" ("id", "url", "description", "userId", "urlTitle", "urlImage", "urlDescription", "createdAt") FROM stdin;
+63	https://www.alura.com.br/artigos/npm-vs-yarn	teste #um	12	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 13:06:53.462088+00
+64	https://www.alura.com.br/artigos/npm-vs-yarn	teste #dois	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 13:07:20.295229+00
+3	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links?node-id=5390%3A66	lindão esse #figma do Linkr!	5	Figma	https://www.figma.com/file/W3lZA9PUddEefwzdgiFZL4/thumbnail?ver=thumbnails/f1e0583f-083e-4aee-b388-38587444b14b	Created with Figma	2022-08-11 19:37:34.885471+00
+4	https://auth0.com/resources/ebooks/jwt-handbook?utm_source=google&utm_medium=cpc&utm_term=-g-web%20json%20token&pm=true&utm_campaign=latam-eng-brazil-generic-authentication	artigo sobre #jwt #auth	5	Auth0 | JWT Handbook	https://images.ctfassets.net/2ntc334xpx65/2yCvSra7EQYIKyWg0cqQyg/c23954455de302a071a37efed03ab4d2/jwt-handbook-tc.png	Ever wondered how JWT came to be and what problems it was designed to tackle?\nAre you curious about the plethora of algorithms available for signing...	2022-08-11 19:39:08.225976+00
+66	https://www.alura.com.br/artigos/npm-vs-yarn	teste #quatro	12	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 13:11:37.56353+00
+68	https://www.alura.com.br/artigos/npm-vs-yarn	\N	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 13:21:25.34508+00
+69	https://www.alura.com.br/artigos/npm-vs-yarn	\N	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 14:21:45.735386+00
+70	https://linkr-front-end-mu.vercel.app/timeline	\N	9	Linkr		Web site created using create-react-app	2022-08-16 19:36:54.142379+00
+72	http://pm1.narvii.com/6340/812f0709f8a8476a425a8f8be004a53808d54358_00.jpg	doguinho #dog	8	\N			2022-08-16 22:47:58.93724+00
+73	https://www.alura.com.br/artigos/npm-vs-yarn	#teste	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 23:34:22.417373+00
+74	https://www.alura.com.br/artigos/npm-vs-yarn	#teste #dois	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 23:36:30.643426+00
+75	https://www.alura.com.br/artigos/npm-vs-yarn	#teste #tres	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-16 23:40:03.481626+00
+78	https://www.figma.com/file/IsxlMkRqXlEFSnGwZU1Fxm/T6-%7C-Projet%C3%A3o%3A-Linkr---Rede-Social-de-Links-(Sprint-2)?node-id=7689%3A503	test	13	Figma	https://www.figma.com/file/IsxlMkRqXlEFSnGwZU1Fxm/thumbnail?ver=thumbnails/fe44758d-7df1-4ce3-bcd7-2cf01bf1b1e8	Created with Figma	2022-08-16 23:52:46.726206+00
+19	https://www.alura.com.br/artigos/npm-vs-yarn	lalalalalalalalalalalala allallalalalaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-14 14:22:47.146566+00
+22	https://static1.patasdacasa.com.br/articles/2/74/2/@/3055-tartar-era-a-famosa-gatinha-grumpy-que-articles_media_mobile-3.jpg	#gato 	8	\N			2022-08-15 01:45:21.845631+00
+23	https://www.petlove.com.br/dicas/wp-content/uploads/2020/02/Dia-do-gato-Petlove-1280x720.jpg	#gato	3	\N			2022-08-15 01:47:02.635799+00
+84	https://www.alura.com.br/artigos/npm-vs-yarn	dafsfs	11	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-17 01:47:11.31204+00
+86	https://www.alura.com.br/artigos/npm-vs-yarn	cccc	11	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-17 02:16:54.897875+00
+87	https://www.alura.com.br/artigos/npm-vs-yarn	eeeee	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-17 02:39:29.158266+00
+30	https://trello.com/b/Jo8ovnd9/sprint2-linkr	e vamos de sprint2	10	\N			2022-08-16 00:26:39.269227+00
+32	https://ge.globo.com/	outro teste #maisum	7	ge.globo - É esporte sempre 	https://s3.glbimg.com/v1/AUTH_378ee63fe83141e69caddd838034e850/static/preview-share-min.png	No ge.globo você encontra a melhor cobertura sobre o Futebol e Outros Esportes, no Brasil e no Mundo: Notícias, Vídeos, Tabelas, Agenda e muito mais.	2022-08-16 00:53:52.672707+00
+92	https://bootcampra.notion.site/Materiais-0750a51f86f04626bd2303e9f7c51cd0	\N	3	Notion – The all-in-one workspace for your notes, tasks, wikis, and databases.	https://www.notion.so/images/meta/default.png	A new tool that blends your everyday work apps into one. It's the all-in-one workspace for you and your team	2022-08-17 06:22:11.312478+00
+94	https://bootcampra.notion.site/Materiais-0750a51f86f04626bd2303e9f7c51cd0	bfbsddsbgf	11	Notion – The all-in-one workspace for your notes, tasks, wikis, and databases.	https://www.notion.so/images/meta/default.png	A new tool that blends your everyday work apps into one. It's the all-in-one workspace for you and your team	2022-08-17 18:50:48.160364+00
+96	https://www.uol.com.br/	post meu	14	UOL - Seu universo online	https://conteudo.imguol.com.br/c/home/interacao/facebook/compartilhe.png	UOL, a maior empresa brasileira de conteúdo, serviços digitais e tecnologia com vários canais de jornalismo e diversas soluções para você ou seu negócio.	2022-08-17 21:43:17.332391+00
+95	https://bootcampra.notion.site/Materiais-0750a51f86f04626bd2303e9f7c51cd0	\N	4	Notion – The all-in-one workspace for your notes, tasks, wikis, and databases.	https://www.notion.so/images/meta/default.png	A new tool that blends your everyday work apps into one. It's the all-in-one workspace for you and your team	2022-08-17 18:53:17.179771+00
+98	https://trello.com/b/Jo8ovnd9/sprint2-linkr	test	15	\N			2022-08-18 13:25:22.656967+00
+99	https://www.alura.com.br/artigos/npm-vs-yarn	#teste da timeline de hashtag - post 4	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:26:36.680086+00
+100	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 5	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:27:05.864882+00
+101	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 6	4	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:27:15.154092+00
+62	https://linkr-front-end-mu.vercel.app/timeline	\N	9	Linkr		Web site created using create-react-app	2022-08-16 06:42:08.068792+00
+102	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 7	12	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:27:35.98842+00
+103	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 8	12	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:27:53.789214+00
+104	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 9	11	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:28:13.501889+00
+105	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 10	11	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:28:22.032609+00
+106	https://www.alura.com.br/artigos/npm-vs-yarn	#teste 11 é agora deu bommm	11	NPM vs Yarn | Alura	https://www.alura.com.br/artigos/assets/npm-vs-yarn/imagem-yarn-vs-npm.png	O que é NPM e Yarn e quais as suas diferenças?	2022-08-18 13:28:45.337741+00
+\.
 
 
 --
--- Name: likes likes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Data for Name: reposts; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.likes
-    ADD CONSTRAINT likes_pkey PRIMARY KEY (id);
-
-
---
--- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.posts
-    ADD CONSTRAINT posts_pkey PRIMARY KEY (id);
-
-
---
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
+COPY "public"."reposts" ("id", "postId", "userId", "createdAt") FROM stdin;
+13	96	14	2022-08-17 22:32:28.641254+00
+14	95	14	2022-08-17 22:33:04.778865+00
+17	95	7	2022-08-17 23:43:07.434057+00
+18	32	7	2022-08-18 00:15:11.882035+00
+19	96	7	2022-08-18 00:15:58.179251+00
+20	64	7	2022-08-18 00:56:24.858908+00
+21	86	3	2022-08-18 04:31:00.15639+00
+22	86	4	2022-08-18 12:55:13.532697+00
+23	94	4	2022-08-18 12:56:54.112952+00
+24	68	10	2022-08-18 13:04:34.855044+00
+25	63	10	2022-08-18 13:05:00.031923+00
+27	101	11	2022-08-18 13:47:27.610701+00
+\.
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
-
---
--- Name: hashtagsposts hashtagsposts_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.hashtagsposts
-    ADD CONSTRAINT "hashtagsposts_postId_fkey" FOREIGN KEY ("postId") REFERENCES public.posts(id);
-
-
---
--- Name: likes likes_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.likes
-    ADD CONSTRAINT "likes_postId_fkey" FOREIGN KEY ("postId") REFERENCES public.posts(id);
+COPY "public"."users" ("id", "name", "email", "password", "imageProfile", "createdAt") FROM stdin;
+2	laura	laura@gmail.com	$2b$10$NBMPpXMdPbxbhdTRaJDSBurgUNkfEwKMxQ2xgzfz/gtNh2c0yX2kW	https://classic.exame.com/wp-content/uploads/2020/06/Bob-Esponja.png?w=550	2022-08-10 00:08:52.113212+00
+3	Matheus	mtsgamorim@gmail.com	$2b$10$W7P57HGCkqDolrEKwPpV0O4Fhvu3NdA89Pu6.1GXIt9EShtuXZ00.	https://pbs.twimg.com/media/FEfsN-aWYAUt3_H.jpg	2022-08-10 19:14:52.502979+00
+4	bob esponja	bob@email.com	$2b$10$Q8SiP0FjTNlECfj7z4Yzdug81mhBRMI8FScNhuWK1FCY6HtIKAYOq	https://almeidajunior-prod1.s3.amazonaws.com/prod/uploads/news/5d81505ac6770.jpg	2022-08-11 00:53:02.337242+00
+5	sam	sanduba@gmail.com	$2b$10$ui2NulSPYRaBOK5L.OK/k.w9SyxiU2ZDo3Od3LuCwNAndA4bVCt8i	https://static.zerochan.net/Zed.full.3199112.jpg	2022-08-11 19:36:06.58889+00
+6	Glauker	glauker@gmail.com	$2b$10$UWlELhIGHwRIr9KucO6aQup7J.jx081MbKZ2.vzaLjXhaLZjMCCVu	https://abra.art.br/premio/wp-content/uploads/sites/10/2017/05/irmao_jorel.png	2022-08-11 21:52:38.367944+00
+7	Bia	beatriz@gmail.com	$2b$10$7hRW0ZYDb3cIe875jt522eyNapXDi49HQUalDwtihXAdPhjh8YUki	https://1.bp.blogspot.com/-Wq2lcq9_a4I/Tc2lLWOkNVI/AAAAAAAABVM/Wao0rm-vWe4/s1600/gatinho-5755.jpg	2022-08-12 14:32:35.31648+00
+8	annadafonte	annafontenelle42.af@gmail.com	$2b$10$j37dAnWNI.RWviP9XrpFBOi7WInkDaF1F1QAzpHrin4sNf2LypDHq	https://minhaseriefavorita.com/wp-content/uploads/2018/09/curiosidades-sobe-coraline.jpg	2022-08-15 01:43:48.837698+00
+9	UserTest	teste@teste.com	$2b$10$pVcYfN2pmoMvkHn9G2qRm.HOA07qyhgV4XksrYWLLO/KAJvZph95u	https://i0.wp.com/www.portaldodog.com.br/cachorros/wp-content/uploads/2021/03/visa%CC%83o-do-cachorro-2.jpeg?resize=626%2C626&ssl=1	2022-08-15 19:37:09.565506+00
+10	samerV	samervalente@gmail.com	$2b$10$UtrZthLbdSpuDuqPGVN0q.TH2Y.6wfQ96aI28vsuLUJGVTlw2Sqh2	https://c.tenor.com/C_0VF9rN9ygAAAAd/zed-galaxy-slayer-zed.gif	2022-08-16 00:23:28.833631+00
+11	patrick estrela	patrick@email.com	$2b$10$TTkD.xE4Wncqt/Jr/070/O0MN.Gao9NWA7PvLyhM5pv2rsz0sSKtO	https://www.torredevigilancia.com/wp-content/uploads/2020/08/patrick-star-wallpaper-810x608.jpg	2022-08-16 13:02:59.380905+00
+12	sandy	sandy@email.com	$2b$10$4I62eW9qnzMZRI05TnNW1OB3TJrFRU6u/yLD.MB3aUOI45rZ3Pvaa	https://ovicio.com.br/wp-content/uploads/2021/05/20210520-sandy-sponge-555x555.jpg	2022-08-16 13:05:26.647631+00
+13	spin	spinner@gmail.com	$2b$10$Jyx0uWmLUUN/TQ4Jt4LFKO3Da6PUZ0JDvAY4M5wKNjpyEh9qfjr82	https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/54d263c2-8c20-41db-b84a-cd22aafd6616/dc69dpz-f053d78f-4a82-4ffd-b936-b2027da2ecb8.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzU0ZDI2M2MyLThjMjAtNDFkYi1iODRhLWNkMjJhYWZkNjYxNlwvZGM2OWRwei1mMDUzZDc4Zi00YTgyLTRmZmQtYjkzNi1iMjAyN2RhMmVjYjguZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.YrSEc1MrxCjdEsSN4dCDL8KlQCwMmeOVKrafP5dsPVg	2022-08-16 23:51:46.666741+00
+14	lula molusco	lula@email.com	$2b$10$/oCUFtcrF0teAliPlpgo7OJGxDzroHRy8MWcaz5vYKPBDmoQnhCdG	https://diariodonordeste.verdesmares.com.br/image/contentid/'policy':1.'2176445':1590247642/Lula-Molusco.jpg?f=default&$p$f=0528860	2022-08-17 21:39:33.384959+00
+15	teemo	teemo@gmail.com	$2b$10$rnK40By47VoZTVA/.4lBAOk8fCYhjACihhPPl48apqN0Bxva6gzY2	https://scontent.fbel12-1.fna.fbcdn.net/v/t1.18169-9/17991800_820323181464421_6575343571949498534_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=k5dyDYND-TUAX_D0xN7&_nc_ht=scontent.fbel12-1.fna&oh=00_AT9x7XZFRYRjKYobM_BYbdabeDSu3KhvdlRud1a9LE1Dkw&oe=63222C55	2022-08-18 13:21:36.63775+00
+\.
 
 
 --
--- Name: likes likes_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: comments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.likes
-    ADD CONSTRAINT "likes_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
+SELECT pg_catalog.setval('"public"."comments_id_seq"', 28, true);
 
 
 --
--- Name: posts posts_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: follows_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
 --
 
-ALTER TABLE ONLY public.posts
-    ADD CONSTRAINT "posts_userId_fkey" FOREIGN KEY ("userId") REFERENCES public.users(id);
+SELECT pg_catalog.setval('"public"."follows_id_seq"', 64, true);
+
+
+--
+-- Name: hashtags_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."hashtags_id_seq"', 39, true);
+
+
+--
+-- Name: hashtagsposts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."hashtagsposts_id_seq"', 39, true);
+
+
+--
+-- Name: likes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."likes_id_seq"', 140, true);
+
+
+--
+-- Name: posts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."posts_id_seq"', 108, true);
+
+
+--
+-- Name: reposts_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."reposts_id_seq"', 27, true);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+SELECT pg_catalog.setval('"public"."users_id_seq"', 15, true);
+
+
+--
+-- Name: hashtags hashtags_name_key; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."hashtags"
+    ADD CONSTRAINT "hashtags_name_key" UNIQUE ("name");
+
+
+--
+-- Name: hashtags hashtags_pkey; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."hashtags"
+    ADD CONSTRAINT "hashtags_pkey" PRIMARY KEY ("id");
+
+
+--
+-- Name: hashtagsposts hashtagsposts_pkey; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."hashtagsposts"
+    ADD CONSTRAINT "hashtagsposts_pkey" PRIMARY KEY ("id");
+
+
+--
+-- Name: likes likes_pkey; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."likes"
+    ADD CONSTRAINT "likes_pkey" PRIMARY KEY ("id");
+
+
+--
+-- Name: posts posts_pkey; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."posts"
+    ADD CONSTRAINT "posts_pkey" PRIMARY KEY ("id");
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."users"
+    ADD CONSTRAINT "users_email_key" UNIQUE ("email");
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."users"
+    ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
+
+
+--
+-- Name: comments comments_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."comments"
+    ADD CONSTRAINT "comments_postId_fkey" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: comments comments_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."comments"
+    ADD CONSTRAINT "comments_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: hashtagsposts hashtagsposts_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."hashtagsposts"
+    ADD CONSTRAINT "hashtagsposts_postId_fkey" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: likes likes_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."likes"
+    ADD CONSTRAINT "likes_postId_fkey" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: likes likes_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."likes"
+    ADD CONSTRAINT "likes_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id");
+
+
+--
+-- Name: posts posts_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."posts"
+    ADD CONSTRAINT "posts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id");
+
+
+--
+-- Name: reposts reposts_postId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."reposts"
+    ADD CONSTRAINT "reposts_postId_fkey" FOREIGN KEY ("postId") REFERENCES "public"."posts"("id") ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: reposts reposts_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: zfatbtsgvywdbs
+--
+
+ALTER TABLE ONLY "public"."reposts"
+    ADD CONSTRAINT "reposts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
