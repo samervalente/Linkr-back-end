@@ -251,6 +251,17 @@ async function setRepost(postId, userId) {
   );
 }
 
+async function countReposts(postId){
+  return connection.query(`  
+    SELECT posts.id, COUNT("postId") AS "qtdReposts" 
+    FROM posts 
+    JOIN reposts 
+    ON reposts."postId" = posts.id
+    WHERE "postId" = $1
+    GROUP BY posts.id;
+  `, [postId])
+}
+
 const postsRepository = {
   publishUrl,
   getFollowers,
@@ -264,6 +275,7 @@ const postsRepository = {
   deletePost,
   countPosts,
   setRepost,
+  countReposts
 };
 
 export default postsRepository;
