@@ -159,3 +159,14 @@ export async function setRepost(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function countReposts(req, res){
+  const postId = req.params.id;
+
+  try{
+    const { rows: reposts } = await postsRepository.countReposts(postId);
+    res.status(200).send(reposts[0]);
+  }catch(err){
+    res.sendStatus(500)
+  }
+}
