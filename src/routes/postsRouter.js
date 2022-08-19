@@ -13,7 +13,8 @@ import {
   getPostsByUserId,
   deletePost,
   countPosts,
-  setRepost
+  setRepost,
+  countReposts
 } from "../controllers/postsController.js";
 
 const router = Router();
@@ -26,6 +27,7 @@ router.get("/posts/:hashtagName", tokenValidator, getPostsByHashtag);
 router.get("/user/posts/:id", tokenValidator, getPostsByUserId);
 router.delete("/posts/:id", tokenValidator, deletePost);
 router.get("/postscount", tokenValidator, countPosts);
-router.post("/reposts/:id", tokenValidator, setRepost)
+router.post("/reposts/:id", tokenValidator, setRepost);
+router.get("/repostscount/:id", countReposts);
 
 export default router;
